@@ -1,5 +1,5 @@
 # Tellmewhen-3.3.5
-A backport of the 4.3.4 cataclysm version of tellmewhen to work with the wotlk 3.3.5 client
+A backport of the 4.3.4 Cataclysm version of TellMeWhen to work with the WOTLK 3.3.5 client
 
 # How to install
 1. Delete the old 3.3.5 version of TellMeWhen from your AddOns directory if you have it
