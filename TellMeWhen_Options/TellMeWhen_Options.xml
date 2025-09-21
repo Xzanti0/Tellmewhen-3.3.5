@@ -2422,12 +2422,7 @@
 								</ScrollChild>
 								<Scripts>
 									<OnLoad>
-										local children = {self:GetChildren()}
-										self.ScrollBar = children[2]
-
-										local scrollbg = self.ScrollBar:CreateTexture(nil, "BACKGROUND")
-										scrollbg:SetAllPoints(self.ScrollBar)
-										scrollbg:SetTexture(0, 0, 0, 0.5)
+										TMW.CreateWOTLKScrollBar(self)
 									
 										self.scrollBarHideable = true
 									</OnLoad>
@@ -3449,7 +3444,7 @@
 						<Scripts>
 							<OnLoad>
 							    self.text:SetText("Override color")
-								TMW:TT(self, "ENABLE", "Override useable color for this particular icon", nil, 1)
+								TMW:TT(self, "Override useable color", "Override useable color for this particular icon", 1, 1)
 								local checked = not not self:GetChecked()
 								if checked then
 									self:GetParent().AlphaColor:Show()
@@ -3508,7 +3503,7 @@
 						<Scripts>
 							<OnLoad>
 							    self.text:SetText("Override color")
-								TMW:TT(self, "ENABLE", "Override unuseable color for this particular icon", nil, 1)
+								TMW:TT(self, "Override unuseable color", "Override unuseable color for this particular icon", 1, 1)
 								local checked = not not self:GetChecked()
 								if checked then
 									self:GetParent().UnAlphaColor:Show()
@@ -3713,7 +3708,7 @@
 					</Frame>
 					<ScrollFrame name="$parentScrollFrame" parentKey="ScrollFrame" inherits="UIPanelScrollFrameTemplate">
 						<Anchors>
-							<Anchor point="TOPLEFT" y="-31"/>
+							<Anchor point="TOPLEFT" y="-33"/>
 							<Anchor point="BOTTOMRIGHT" y="32"/>
 						</Anchors>
 						<ScrollChild>
@@ -3731,12 +3726,7 @@
 						</ScrollChild>
 						<Scripts>
 							<OnLoad>
-								local children = {self:GetChildren()}
-							    self.ScrollBar = children[2]
-
-								local scrollbg = self.ScrollBar:CreateTexture(nil, "BACKGROUND")
-								scrollbg:SetAllPoints(self.ScrollBar)
-								scrollbg:SetTexture(0, 0, 0, 0.5)
+							    TMW.CreateWOTLKScrollBar(self)
 								
 							    self.scrollBarHideable = true
 							</OnLoad>
@@ -3748,8 +3738,12 @@
 						self:RegisterForDrag("LeftButton")
 						self:Hide()
 					</OnLoad>
-					<OnDragStart> TMW.IE:StartMoving() </OnDragStart>
-					<OnDragStop> TMW.IE:StopMovingOrSizing() </OnDragStop>
+					<OnDragStart> 
+					    TMW.IE:StartMoving() 
+					</OnDragStart>
+					<OnDragStop> 
+					    TMW.IE:StopMovingOrSizing() 
+					</OnDragStop>
 					<OnShow>
 					--	TMW.CNDT:ColorizeParentheses()
 					</OnShow>
@@ -3792,7 +3786,8 @@
 							    self.ScrollBar = children[2]
 
 								local scrollbg = self.ScrollBar:CreateTexture(nil, "BACKGROUND")
-								scrollbg:SetAllPoints(self.ScrollBar)
+								scrollbg:SetPoint("TOPLEFT", self.ScrollBar, "TOPLEFT", -1, 0)
+								scrollbg:SetPoint("BOTTOMRIGHT", self.ScrollBar, "BOTTOMRIGHT")
 								scrollbg:SetTexture(0, 0, 0, 0.5)
 								
 								self.scrollBarHideable = true

@@ -117,9 +117,12 @@ L["ICONMENU_UNITCOOLDOWN_DESC"] = [[Tracks the cooldowns of someone else.
 %s can be tracked using %q as the name.]]
 
 L["ICONMENU_ICD"] = "Internal Cooldown"
+L["ICONMENU_ICD_DESC"] = [=[Tracks the cooldown of a proc or a similar effect.]=]
+--[[
 L["ICONMENU_ICD_DESC"] = [=[Tracks the cooldown of a proc or a similar effect.
 
 |cFFFF5959IMPORTANT|r: See the tooltips under the %q settings for how to track each internal cooldown type.]=]
+]]
 
 L["ICONMENU_CAST"] = "Spell Cast"
 L["ICONMENU_CAST_DESC"] = [=[Tracks spell casts and channels.]=]

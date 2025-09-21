@@ -112,6 +112,33 @@ end
 
 
 ---------- Miscellaneous ----------
+
+TMW.CreateWOTLKScrollBar = function(self)
+	local children = {self:GetChildren()}
+	self.ScrollBar = children[2]
+	self.ScrollBar:SetFrameLevel(self.ScrollBar:GetParent():GetFrameLevel() + 200)
+	
+	self.ScrollBar:ClearAllPoints()
+	self.ScrollBar:SetWidth(16)
+	self.ScrollBar:SetHeight(self:GetHeight() - 32)
+	self.ScrollBar:SetPoint("RIGHT", self, "RIGHT", -12, 0)
+
+	local bg = CreateFrame("Frame", self:GetName() .. "BkgFrame", self.ScrollBar)
+	bg:SetPoint("TOPLEFT", self.ScrollBar, "TOPLEFT", -3, 0)
+	bg:SetPoint("BOTTOMRIGHT", self.ScrollBar, "BOTTOMRIGHT", 2, 1)
+	bg:SetBackdrop({
+		bgFile = nil,
+		edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+		edgeSize = 8,
+		insets = { left = 0, right = 0, top = 0, bottom = 0 }
+	})
+	bg:SetBackdropColor(0, 0, 0, 0.7)
+	local scrollbg = bg:CreateTexture(nil, "BACKGROUND")
+	scrollbg:SetAllPoints(self.ScrollBar)
+	scrollbg:SetTexture(0, 0, 0, 0.3)
+end
+
+
 TMW.Backupdb = CopyTable(TellMeWhenDB)
 TMW.BackupDate = date("%I:%M:%S %p")
 
@@ -3732,7 +3759,8 @@ function TMW:ExportToString(editbox, ...)
 	editbox:HighlightText()
 	editbox:SetFocus()
 	CloseDropDownMenus()
-	HELP:Show("ICON_EXPORT_DOCOPY", nil, editbox, 0, 0, L["HELP_EXPORT_DOCOPY_" .. (IsMacClient() and "MAC" or "WIN")])
+	--wotlk backport: disabling for now as i cannot get the help popup to close when ctrl+c is pressed
+	--HELP:Show("ICON_EXPORT_DOCOPY", nil, editbox, 0, 0, L["HELP_EXPORT_DOCOPY_" .. (IsMacClient() and "MAC" or "WIN")])
 end
 
 function TMW:ExportToComm(editbox, ...)

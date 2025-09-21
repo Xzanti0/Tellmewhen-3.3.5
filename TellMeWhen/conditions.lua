@@ -178,7 +178,8 @@ do -- STANCES
 		{class = "PRIEST", 		id = 15473}, 	-- Shadowform
 
 		{class = "ROGUE", 		id = 1784}, 	-- Stealth
-
+		{class = "ROGUE", 		id = 51713}, 	-- Shadow Dance
+		
 		{class = "DEATHKNIGHT", id = 48263}, 	-- Blood Presence
 		{class = "DEATHKNIGHT", id = 48266}, 	-- Frost Presence
 		{class = "DEATHKNIGHT", id = 48265}, 	-- Unholy Presence
@@ -464,8 +465,8 @@ function Env.GetShapeshiftForm()
 	local i = GetShapeshiftForm()
 	if pclass == "WARLOCK" and i == 2 then  --metamorphosis is index 2 for some reason
 		i = 1
-	elseif pclass == "ROGUE" and i > 1 then	--vanish and shadow dance return 3 when active, vanish returns 2 when shadow dance isnt learned. Just treat everything as stealth
-		i = 1
+	elseif pclass == "ROGUE" and i == 3 then	--shadow dance return 3 when active
+		i = 2
 	end
 	if i > NumShapeshiftForms then 	--many Classes return an invalid number on login, but not anymore!
 		i = 0
@@ -524,7 +525,9 @@ local PetModes = {
 	"PET_MODE_DEFENSIVE",
 	"PET_MODE_PASSIVE",
 }
-for k, v in pairs(PetModes) do PetModes[v] = k end
+for k, v in pairs(PetModes) do 
+    PetModes[v] = k 
+end
 function Env.GetActivePetMode()
 	for i = NUM_PET_ACTION_SLOTS, 1, -1 do -- go backwards since they are probably at the end of the action bar
 		local name, _, _, isToken, isActive = GetPetActionInfo(i)
@@ -1430,7 +1433,7 @@ CNDT.Types = {
 				pclass == "PALADIN" and L["AURA"] or
 				pclass == "DEATHKNIGHT" and L["PRESENCE"] or
 				pclass == "DRUID" and L["SHAPESHIFT"] or
-				--pclass == "WARRIOR" and L["STANCE"] or
+				pclass == "WARRIOR" and L["STANCE"] or
 				L["STANCE"],
 		category = L["CNDTCAT_ATTRIBUTES_PLAYER"],
 		value = "STANCE",
@@ -1578,12 +1581,15 @@ CNDT.Types = {
 		texttable = bool,
 		nooperator = true,
 		unit = PLAYER,
-		name = function(editbox) TMW:TT(editbox, "CONDITIONPANEL_TRACKING", "CNDT_ONLYFIRST") editbox.label = L["SPELLTOCHECK"] end,
+		name = function(editbox) 
+		    TMW:TT(editbox, "CONDITIONPANEL_TRACKING", "CNDT_ONLYFIRST") 
+			editbox.label = L["SPELLTOCHECK"] 
+		end,
 		useSUG = "tracking",
 		icon = "Interface\\MINIMAP\\TRACKING\\None",
 		tcoords = standardtcoords,
-		funcstr = [[Tracking[c.NameName] == c.1nil]],
-		events = function()
+		funcstr = [[Tracking[strlower(c.NameName)] == c.1nil]],
+		events = function(c)
 			-- keep this event based because it is so extensive
 			CNDT:RegisterEvent("MINIMAP_UPDATE_TRACKING")
 			CNDT:MINIMAP_UPDATE_TRACKING()
@@ -1600,7 +1606,10 @@ CNDT.Types = {
 		categorySpacebefore = true,
 		range = 30,
 		step = 0.1,
-		name = function(editbox) TMW:TT(editbox, "SPELLTOCHECK", "CNDT_ONLYFIRST") editbox.label = L["SPELLTOCHECK"] end,
+		name = function(editbox) 
+		    TMW:TT(editbox, "SPELLTOCHECK", "CNDT_ONLYFIRST") 
+			editbox.label = L["SPELLTOCHECK"] 
+		end,
 		useSUG = "spellWithGCD",
 		unit = PLAYER,
 		texttable = usableseconds,
@@ -1620,8 +1629,14 @@ CNDT.Types = {
 		value = "SPELLCDCOMP",
 		category = L["CNDTCAT_SPELLSABILITIES"],
 		noslide = true,
-		name = function(editbox) TMW:TT(editbox, "SPELLTOCOMP1", "CNDT_ONLYFIRST") editbox.label = L["SPELLTOCOMP1"] end,
-		name2 = function(editbox) TMW:TT(editbox, "SPELLTOCOMP2", "CNDT_ONLYFIRST") editbox.label = L["SPELLTOCOMP2"] end,
+		name = function(editbox) 
+		    TMW:TT(editbox, "SPELLTOCOMP1", "CNDT_ONLYFIRST") 
+			editbox.label = L["SPELLTOCOMP1"] 
+		end,
+		name2 = function(editbox) 
+		    TMW:TT(editbox, "SPELLTOCOMP2", "CNDT_ONLYFIRST") 
+			editbox.label = L["SPELLTOCOMP2"] 
+		end,
 		useSUG = "spellWithGCD",
 		unit = PLAYER,
 		icon = "Interface\\Icons\\spell_holy_divineintervention",
@@ -1654,8 +1669,13 @@ CNDT.Types = {
 		category = L["CNDTCAT_SPELLSABILITIES"],
 		min = 0,
 		max = 1,
-		name = function(editbox) TMW:TT(editbox, "ICONMENU_REACTIVE", "CNDT_ONLYFIRST") editbox.label = L["SPELLTOCHECK"] end,
-		check = function(check) TMW:TT(check, "ICONMENU_IGNORENOMANA", "ICONMENU_IGNORENOMANA_DESC") end,
+		name = function(editbox) 
+		    TMW:TT(editbox, "ICONMENU_REACTIVE", "CNDT_ONLYFIRST") 
+			editbox.label = L["SPELLTOCHECK"] 
+		end,
+		check = function(check) 
+		    TMW:TT(check, "ICONMENU_IGNORENOMANA", "ICONMENU_IGNORENOMANA_DESC") 
+		end,
 		useSUG = true,
 		nooperator = true,
 		unit = false,
@@ -1671,7 +1691,10 @@ CNDT.Types = {
 		category = L["CNDTCAT_SPELLSABILITIES"],
 		min = 0,
 		max = 1,
-		name = function(editbox) TMW:TT(editbox, "CONDITIONPANEL_MANAUSABLE", "CNDT_ONLYFIRST") editbox.label = L["SPELLTOCHECK"] end,
+		name = function(editbox) 
+		    TMW:TT(editbox, "CONDITIONPANEL_MANAUSABLE", "CNDT_ONLYFIRST") 
+			editbox.label = L["SPELLTOCHECK"] 
+		end,
 		useSUG = true,
 		nooperator = true,
 		unit = false,
@@ -1689,7 +1712,10 @@ CNDT.Types = {
 		category = L["CNDTCAT_SPELLSABILITIES"],
 		min = 0,
 		max = 1,
-		name = function(editbox) TMW:TT(editbox, "CONDITIONPANEL_SPELLRANGE", "CNDT_ONLYFIRST") editbox.label = L["SPELLTOCHECK"] end,
+		name = function(editbox) 
+		    TMW:TT(editbox, "CONDITIONPANEL_SPELLRANGE", "CNDT_ONLYFIRST") 
+			editbox.label = L["SPELLTOCHECK"] 
+		end,
 		useSUG = true,
 		nooperator = true,
 		texttable = {[0] = L["INRANGE"], [1] = L["NOTINRANGE"]},
@@ -1726,7 +1752,10 @@ CNDT.Types = {
 		category = L["CNDTCAT_SPELLSABILITIES"],
 		range = 30,
 		step = 0.1,
-		name = function(editbox) TMW:TT(editbox, L["ITEMCOOLDOWN"], "CNDT_ONLYFIRST", 1) editbox.label = L["ITEMTOCHECK"] end,
+		name = function(editbox) 
+		    TMW:TT(editbox, L["ITEMCOOLDOWN"], "CNDT_ONLYFIRST", 1) 
+			editbox.label = L["ITEMTOCHECK"] 
+		end,
 		useSUG = "item",
 		unit = PLAYER,
 		texttable = usableseconds,
@@ -1745,8 +1774,14 @@ CNDT.Types = {
 		value = "ITEMCDCOMP",
 		category = L["CNDTCAT_SPELLSABILITIES"],
 		noslide = true,
-		name = function(editbox) TMW:TT(editbox, "ITEMTOCOMP1", "CNDT_ONLYFIRST") editbox.label = L["ITEMTOCOMP1"] end,
-		name2 = function(editbox) TMW:TT(editbox, "ITEMTOCOMP2", "CNDT_ONLYFIRST") editbox.label = L["ITEMTOCOMP2"] end,
+		name = function(editbox) 
+		    TMW:TT(editbox, "ITEMTOCOMP1", "CNDT_ONLYFIRST") 
+			editbox.label = L["ITEMTOCOMP1"] 
+		end,
+		name2 = function(editbox) 
+		    TMW:TT(editbox, "ITEMTOCOMP2", "CNDT_ONLYFIRST") 
+			editbox.label = L["ITEMTOCOMP2"] 
+		end,
 		useSUG = "item",
 		unit = PLAYER,
 		icon = "Interface\\Icons\\inv_jewelry_trinketpvp_01",
@@ -1776,7 +1811,10 @@ CNDT.Types = {
 		category = L["CNDTCAT_SPELLSABILITIES"],
 		min = 0,
 		max = 1,
-		name = function(editbox) TMW:TT(editbox, "CONDITIONPANEL_ITEMRANGE", "CNDT_ONLYFIRST") editbox.label = L["ITEMTOCHECK"] end,
+		name = function(editbox) 
+		    TMW:TT(editbox, "CONDITIONPANEL_ITEMRANGE", "CNDT_ONLYFIRST") 
+			editbox.label = L["ITEMTOCHECK"] 
+		end,
 		useSUG = "item",
 		nooperator = true,
 		texttable = {[0] = L["INRANGE"], [1] = L["NOTINRANGE"]},
@@ -2432,7 +2470,9 @@ CNDT.Types = {
 		icon = "Interface\\Icons\\ability_mage_timewarp",
 		tcoords = standardtcoords,
 		funcstr = [[UnitSpellHaste("player")/100 c.Operator c.Level]],
-		events = function() return "COMBAT_RATING_UPDATE", "UNIT_SPELL_HASTE", "player" end,
+		events = function() 
+		    return "COMBAT_RATING_UPDATE", "UNIT_SPELL_HASTE", "player" 
+		end,
 	},
 		{ -- mana regen
 		text = MANA_REGEN,
@@ -2440,7 +2480,9 @@ CNDT.Types = {
 		category = L["CNDTCAT_STATS"],
 		range = 1000/5,
 		unit = PLAYER,
-		texttable = function(k) return format(L["MP5"], commanumber(k)*5) end,
+		texttable = function(k) 
+		    return format(L["MP5"], commanumber(k)*5) 
+		end,
 		icon = "Interface\\Icons\\spell_magic_managain",
 		tcoords = standardtcoords,
 		funcstr = [[GetManaRegen() c.Operator c.Level]], -- anyone know of an event that can be reliably listened to to get this?
@@ -2452,7 +2494,9 @@ CNDT.Types = {
 		category = L["CNDTCAT_STATS"],
 		range = 1000/5,
 		unit = PLAYER,
-		texttable = function(k) return format(L["MP5"], commanumber(k)*5) end,
+		texttable = function(k) 
+		    return format(L["MP5"], commanumber(k)*5) 
+		end,
 		icon = "Interface\\Icons\\spell_frost_summonwaterelemental",
 		tcoords = standardtcoords,
 		funcstr = [[select(2, GetManaRegen()) c.Operator c.Level]],
@@ -2512,7 +2556,10 @@ CNDT.Types = {
 		max = 1,
 		nooperator = true,
 		noslide = true,
-		name = function(editbox) TMW:TT(editbox, "MACROCONDITION", "MACROCONDITION_EB_DESC") editbox.label = L["MACROTOEVAL"] end,
+		name = function(editbox) 
+		    TMW:TT(editbox, "MACROCONDITION", "MACROCONDITION_EB_DESC") 
+			editbox.label = L["MACROTOEVAL"] 
+		end,
 		unit = false,
 		icon = "Interface\\Icons\\inv_misc_punchcards_yellow",
 		tcoords = standardtcoords,
@@ -2532,7 +2579,10 @@ CNDT.Types = {
 		max = 1,
 		nooperator = true,
 		noslide = true,
-		name = function(editbox) TMW:TT(editbox, "LUACONDITION", "LUACONDITION_DESC") editbox.label = L["CODETOEXE"] end,
+		name = function(editbox) 
+		    TMW:TT(editbox, "LUACONDITION", "LUACONDITION_DESC") 
+			editbox.label = L["CODETOEXE"]
+		end,
 		unit = false,
 		icon = "Interface\\Icons\\INV_Misc_Gear_01",
 		tcoords = standardtcoords,
@@ -2979,7 +3029,9 @@ function CNDT.Conditions_LoadData(self, Conditions)
 end
 
 function CNDT:GetConditionCheckFunctionString(parent, Conditions)
-	if TMW.debug and test then test() end
+	if TMW.debug and test then 
+	    test() 
+	end
 
 	local funcstr = ""
 	

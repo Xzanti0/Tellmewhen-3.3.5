@@ -725,8 +725,6 @@ do -- Iterators
 	end
 end
 
-
-
 local RelevantToAll = {
 	-- (or almost all, use false to override)
 	__index = {
