@@ -1382,6 +1382,15 @@ L["STRATA_TOOLTIP"] = "Tooltip"
 -- EQUIVS
 -- --------
 
+L["ScrollStamina"] = "Scroll - Stamina"
+L["ScrollAgility"] = "Scroll - Agility"
+L["ScrollIntellect"] = "Scroll - Intellect"
+L["ScrollStrength"] = "Scroll - Strength"
+L["ScrollSpirit"] = "Scroll - Spirit"
+
+L["Flasks"] = "Flasks"
+L["Potions"] = "Potions"
+
 L["IncreasedArmorPercent"] = "Increased Armor Percent"
 L["DamageReduction"] = "Increased Damage Reduction"
 L["IncreasedSP"] = "Increased Spellpower"
