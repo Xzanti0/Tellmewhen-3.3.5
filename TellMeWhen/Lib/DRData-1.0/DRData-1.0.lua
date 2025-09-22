@@ -3,11 +3,12 @@ local minor = 1009
 assert(LibStub, string.format("%s requires LibStub.", major))
 
 local Data = LibStub:NewLibrary(major, minor)
-if( not Data ) then return end
+if not Data then return end
 
 local L = {
 	["Banish"] = "Banish",
 	["Controlled stuns"] = "Controlled stuns",
+	["Controlled stuns 2"] = "Controlled stuns 2",
 	["Cyclone"] = "Cyclone",
 	["Disarms"] = "Disarms",
 	["Disorients"] = "Disorients",
@@ -27,6 +28,7 @@ local L = {
 if GetLocale() == "frFR" then
 	L["Banish"] = "Bannissement"
 	L["Controlled stuns"] = "Etourdissements contrôlés"
+	L["Controlled stuns 2"] = "Etourdissements contrôlés 2"
 	L["Cyclone"] = "Cyclone"
 	L["Disarms"] = "Désarmements"
 	L["Disorients"] = "Désorientations"
@@ -50,139 +52,676 @@ Data.RESET_TIME = 18
 -- List of spellID -> DR category
 Data.spells = {
 	--[[ TAUNT ]]--
-	[  355] = "taunt", -- Taunt (Warrior)
-	[53477] = "taunt", -- Taunt (Hunter tenacity pet)
-	[ 6795] = "taunt", -- Growl (Druid)
-	[56222] = "taunt", -- Dark Command
-	[62124] = "taunt", -- Hand of Reckoning
-	[31790] = "taunt", -- Righteous Defense
-	[20736] = "taunt", -- Distracting Shot
-	[ 1161] = "taunt", -- Challenging Shout
-	[ 5209] = "taunt", -- Challenging Roar
+	-- Taunt (Warrior)
+	[  355] = "taunt",
+	[29060] = "taunt",
+	[37486] = "taunt",
+	[37548] = "taunt",
+	[49613] = "taunt",
+	[52154] = "taunt",
+	[54794] = "taunt",	
+	[70428] = "taunt",	
+	
+	-- Taunt (Hunter tenacity pet)
+	[53477] = "taunt",
+	
+	-- Growl (Druid)
+	[ 6795] = "taunt",
+	
+	-- Dark Command
+	[56222] = "taunt",
+	
+	-- Hand of Reckoning
+	[62124] = "taunt",
+	
+	-- Righteous Defense
+	[31790] = "taunt",
+	[31789] = "taunt",
+	
+	-- Distracting Shot
+	[20736] = "taunt",
+	[56559] = "taunt",
+	
+	-- Challenging Shout
+	[ 1161] = "taunt",
+	
+	-- Challenging Roar
+	[ 5209] = "taunt",
+	
 	[57603] = "taunt", -- Death Grip
+	
 	[36213] = "taunt", -- Angered Earth -- FIXME: NPC ability ?
+	
 	[17735] = "taunt", -- Suffering (Voidwalker)
-	[58857] = "taunt", -- Twin Howl (Spirit wolves)
+	
+	-- Twin Howl (Spirit wolves)
+	[58857] = "taunt",
 
 	--[[ DISORIENTS ]]--
-	[49203] = "disorient", -- Hungering Cold
-	[ 6770] = "disorient", -- Sap
-	[ 1776] = "disorient", -- Gouge
-	[51514] = "disorient", -- Hex
-	[ 9484] = "disorient", -- Shackle Undead
-	[  118] = "disorient", -- Polymorph
-	[28272] = "disorient", -- Polymorph (pig)
-	[28271] = "disorient", -- Polymorph (turtle)
-	[61305] = "disorient", -- Polymorph (black cat)
-	[61025] = "disorient", -- Polymorph (serpent) -- FIXME: gone ?
-	[61721] = "disorient", -- Polymorph (rabbit)
-	[61780] = "disorient", -- Polymorph (turkey)
-	[ 3355] = "disorient", -- Freezing Trap
-	[19386] = "disorient", -- Wyvern Sting
-	[20066] = "disorient", -- Repentance
-	[ 2637] = "disorient", -- Hibernate
-
+	-- Hungering Cold
+	[49203] = "disorient",
+	[51209] = "disorient",
+	
+	 -- Sap
+	[51724] = "disorient",
+	[ 2070] = "disorient",
+	[ 6770] = "disorient",
+	[11297] = "disorient",
+	[30980] = "disorient",
+	
+	-- Gouge
+	[ 1776] = "disorient",
+	[ 1777] = "disorient",
+	[ 8629] = "disorient",
+	[11285] = "disorient",
+	[11286] = "disorient",
+	[12540] = "disorient",
+	[13579] = "disorient",
+	[24698] = "disorient",
+	[28456] = "disorient",
+	[29425] = "disorient",
+	[34940] = "disorient",
+	[36862] = "disorient",
+	[38764] = "disorient",	
+	[38863] = "disorient",	
+	
+	-- Hex
+	[51514] = "disorient",
+	[16097] = "disorient",
+	[53439] = "disorient",
+	[66054] = "disorient",
+	
+	-- Shackle Undead
+	[ 9484] = "disorient",
+	[ 9485] = "disorient",
+	[10955] = "disorient",
+	[11444] = "disorient",
+	[40135] = "disorient",
+	[68342] = "disorient",
+	
+	-- Polymorph
+	[12826] = "disorient",
+	[13323] = "disorient",
+	[58537] = "disorient",
+	[68311] = "disorient",
+	[  118] = "disorient",
+	[12824] = "disorient",
+	[12825] = "disorient",
+	[14621] = "disorient",
+	[15534] = "disorient",
+	[27760] = "disorient",
+	[29124] = "disorient",
+	[29848] = "disorient",
+	[30838] = "disorient",
+	[36840] = "disorient",
+	[38245] = "disorient",
+	[38896] = "disorient",
+	[41334] = "disorient",
+	[43309] = "disorient",
+	[46280] = "disorient",
+	[65801] = "disorient",
+	[66043] = "disorient",
+	
+	-- Polymorph (pig)
+	[28272] = "disorient",
+	[28285] = "disorient",
+	
+	-- Polymorph (turtle)
+	[28271] = "disorient",
+	
+	-- Polymorph (black cat)
+	[61305] = "disorient",
+	
+	-- Polymorph (serpent) -- TODO: gone ?
+	[61025] = "disorient",
+	
+	-- Polymorph (rabbit)
+	[61721] = "disorient",
+	
+	-- Polymorph (turkey)
+	[61780] = "disorient",
+	[71319] = "disorient",
+	
+	-- Freezing Trap Effect
+	[14309] = "disorient",
+	[55041] = "disorient",
+	[ 3355] = "disorient",
+	[14308] = "disorient",
+	
+	-- Wyvern Sting
+	[49010] = "disorient",
+	[49012] = "disorient",
+	[19386] = "disorient",	
+	[24131] = "disorient",	
+	[24132] = "disorient",	
+	[24133] = "disorient",	
+	[24134] = "disorient",	
+	[24135] = "disorient",	
+	[24335] = "disorient",	
+	[24336] = "disorient",	
+	[26180] = "disorient",	
+	[26233] = "disorient",	
+	[26748] = "disorient",	
+	[27068] = "disorient",	
+	[27069] = "disorient",	
+	[41186] = "disorient",	
+	[49009] = "disorient",	
+	[49011] = "disorient",	
+	[65877] = "disorient",	
+	[65878] = "disorient",		
+	
+	-- Repentance
+	[20066] = "disorient",
+	[29511] = "disorient",
+	[32779] = "disorient",
+	[66008] = "disorient",
+	
+	-- Hibernate
+	[ 2637] = "disorient",
+	[18657] = "disorient",
+	[18658] = "disorient",
+		
 	--[[ SILENCES ]]--
-	[50479] = "silence", -- Nether Shock (Nether ray)
-	[ 1330] = "silence", -- Garrote
-	[25046] = "silence", -- Arcane Torrent (Energy version)
-	[28730] = "silence", -- Arcane Torrent (Mana version)
+	-- Nether Shock (Nether ray)
+	[35334] = "silence",
+	[44957] = "silence",
+	[50479] = "silence",
+	[53584] = "silence",
+	[53586] = "silence",
+	[53587] = "silence",
+	[53588] = "silence",
+	[53589] = "silence",
+	[62347] = "silence",
+	
+	-- Garrote
+	[ 1330] = "silence",
+	
+	-- Arcane Torrent
+	[25046] = "silence", -- Arcane Torrent (Energy version)	
+	[28730] = "silence", -- Arcane Torrent (Mana version)	
 	[50613] = "silence", -- Arcane Torrent (Runic power version)
-	[15487] = "silence", -- Silence
-	[34490] = "silence", -- Silencing Shot
-	[18425] = "silence", -- Improved Kick (rank 1)
-	[18469] = "silence", -- Improved Counterspell (rank 1)
-	[55021] = "silence", -- Improved Counterspell (rank 2)
-	[24259] = "silence", -- Spell Lock (Felhunter)
-	[47476] = "silence", -- Strangulate
-	[18498] = "silence", -- Gag Order (Warrior talent)
-	[31935] = "silence", -- Avenger's Shield
-
+	[47779] = "silence",	
+	[25048] = "silence",	
+	[28733] = "silence",	
+	[33390] = "silence",	
+	[36022] = "silence",	
+	[50615] = "silence",		
+	
+	-- Silence
+	[15487] = "silence",
+	
+	-- Silencing Shot
+	[34490] = "silence",
+	[41084] = "silence",
+	[42671] = "silence",	
+	
+	-- Improved Kick
+	[18425] = "silence",
+	
+	-- Improved Counterspell
+	[18469] = "silence",
+	[55021] = "silence",
+	
+	-- Spell Lock (Felhunter or other source)
+	[24259] = "silence",
+	[30849] = "silence",
+	[19244] = "silence",
+	[19647] = "silence",
+	[19648] = "silence",
+	[19650] = "silence",
+	[20433] = "silence",
+	[20434] = "silence",
+	[67519] = "silence",	
+		
+	-- Strangulate
+	[47476] = "silence",
+	[48680] = "silence",
+	[49913] = "silence",
+	[49914] = "silence",
+	[49915] = "silence",
+	[49916] = "silence",
+	[51131] = "silence",
+	[55314] = "silence",
+	[55334] = "silence",
+	[66018] = "silence",
+	
+	-- Gag Order (Warrior talent)
+	[18498] = "silence",
+	[74347] = "silence",
+	
+    -- Shield of the templar (NOT Avenger's Shield)
+	[63529] = "silence",	
+	
 	--[[ DISARMS ]]--
-	[51722] = "disarm", -- Dismantle
-	[  676] = "disarm", -- Disarm
-	[64058] = "disarm", -- Psychic Horror (Disarm effect)
-	[50541] = "disarm", -- Clench (Scorpid)
+	-- Dismantle
+	[51722] = "disarm",
+	
+	-- Disarm
+	[  676] = "disarm",
+	[ 6713] = "disarm",
+	[ 8379] = "disarm",
+	[11879] = "disarm",
+	[13534] = "disarm",
+	[15752] = "disarm",
+	[22691] = "disarm",
+	[27581] = "disarm",
+	[30013] = "disarm",
+	[31955] = "disarm",
+	[36139] = "disarm",
+	[41062] = "disarm",
+	[48883] = "disarm",
+	[65935] = "disarm",
+	
+	-- Psychic Horror (Disarm effect)
+	[64058] = "disarm",
+	
+	-- Snatch
+	[50541] = "disarm",
+	[53537] = "disarm",
+	[53538] = "disarm",
+	[53540] = "disarm",
+	[53542] = "disarm",
+	[53543] = "disarm",
 
 	--[[ FEARS ]]--
-	[ 2094] = "fear", -- Blind
-	[ 5782] = "fear", -- Fear (Warlock)
-	[ 6358] = "fear", -- Seduction (Succubus)
-	[ 5484] = "fear", -- Howl of Terror
-	[ 8122] = "fear", -- Psychic Scream
-	[65545] = "fear", -- Psychic Horror
-	[ 1513] = "fear", -- Scare Beast
-	[10326] = "fear", -- Turn Evil
-	[ 5246] = "fear", -- Intimidating Shout (main target)
-	[20511] = "fear", -- Intimidating Shout (secondary targets)
+	-- Blind
+	[ 2094] = "fear",
+	[42972] = "fear",
+	[21060] = "fear",
+	[34654] = "fear",
+	[34694] = "fear",
+	[43433] = "fear",
+	[65960] = "fear",
+	
+	-- Fear (Warlock)
+	[ 6215] = "fear",
+	[68950] = "fear",
+	[ 5782] = "fear",
+	[ 6213] = "fear",
+	[12096] = "fear",
+	[12542] = "fear",
+	[22678] = "fear",
+	[26070] = "fear",
+	[26580] = "fear",
+	[26661] = "fear",
+	[27641] = "fear",
+	[27990] = "fear",
+	[29168] = "fear",	
+	[29321] = "fear",
+	[30002] = "fear",
+	[30530] = "fear",
+	[30584] = "fear",
+	[30615] = "fear",
+	
+	-- Seduction (Succubus)
+	[ 6358] = "fear",
+	[ 6359] = "fear",
+	[20407] = "fear",
+	[29490] = "fear",
+	[30850] = "fear",
+	[31865] = "fear",
+	
+	-- Howl of Terror
+	[17928] = "fear",
+	[ 5484] = "fear",
+	[50577] = "fear",
+	
+	-- Psychic Scream
+	[10890] = "fear",
+	[13704] = "fear",
+	[34322] = "fear",
+	[ 8122] = "fear",
+	[ 8124] = "fear",
+	[10888] = "fear",
+	[15398] = "fear",
+	[22884] = "fear",
+	[26042] = "fear",
+	[27610] = "fear",
+	[43432] = "fear",
+	[65543] = "fear",
+
+	-- Psychic Horror
+	--[64044] = "fear",
+	[65545] = "fear",
+	
+	-- Scare Beast
+	[14327] = "fear",
+	[ 1513] = "fear",
+	[14326] = "fear",
+	
+	-- Turn Evil
+	[10326] = "fear",
+	
+	-- Intimidating Shout
+	[ 5246] = "fear",
+	[20511] = "fear",
+	[65930] = "fear",
+	[65931] = "fear",
 
 	--[[ CONTROL STUNS ]]--
-	[50519] = "ctrlstun", -- Sonic Blast (Bat)
-	[12809] = "ctrlstun", -- Concussion Blow
-	[46968] = "ctrlstun", -- Shockwave
-	[  853] = "ctrlstun", -- Hammer of Justice
-	[ 5211] = "ctrlstun", -- Bash
-	[24394] = "ctrlstun", -- Intimidation
-	[22570] = "ctrlstun", -- Maim
-	[  408] = "ctrlstun", -- Kidney Shot
-	[20549] = "ctrlstun", -- War Stomp
-	[20252] = "ctrlstun", -- Intercept
-	[20253] = "ctrlstun", -- Intercept
-	[44572] = "ctrlstun", -- Deep Freeze
-	[30283] = "ctrlstun", -- Shadowfury
-	[ 2812] = "ctrlstun", -- Holy Wrath
-	[22703] = "ctrlstun", -- Inferno Effect
-	[54785] = "ctrlstun", -- Demon Leap (Warlock)
-	[47481] = "ctrlstun", -- Gnaw (Ghoul)
-	[56626] = "ctrlstun", -- Sting (Wasp)
-	[ 1833] = "ctrlstun", -- Cheap Shot
-	[ 9005] = "ctrlstun", -- Pounce
-	[ 7922] = "ctrlstun", -- Charge
+	-- Sonic Blast (Bat)
+	[50519] = "ctrlstun",
+	[53564] = "ctrlstun",
+	[53565] = "ctrlstun",
+	[53566] = "ctrlstun",
+	[53567] = "ctrlstun",
+	[53568] = "ctrlstun",
+	
+	-- Concussion Blow
+	[12809] = "ctrlstun",
+	[22427] = "ctrlstun",
+	[52719] = "ctrlstun",
+	[32588] = "ctrlstun",
+	[54132] = "ctrlstun",
+	
+	-- Shockwave
+	[46968] = "ctrlstun",
+	[58977] = "ctrlstun",
+	[75418] = "ctrlstun",
+	
+	-- Hammer of Justice
+	[10308] = "ctrlstun",
+	[66940] = "ctrlstun",
+	[  853] = "ctrlstun",
+	[ 5588] = "ctrlstun",
+	[ 5589] = "ctrlstun",
+	[13005] = "ctrlstun",
+	[32416] = "ctrlstun",
+	[37369] = "ctrlstun",
+	[39077] = "ctrlstun",
+	[41468] = "ctrlstun",
+	[66007] = "ctrlstun",
+	[66613] = "ctrlstun",
+	[66863] = "ctrlstun",
+	[66941] = "ctrlstun",
+	
+	-- Bash
+	[ 5211] = "ctrlstun",
+	[ 8983] = "ctrlstun",
+	[ 6798] = "ctrlstun",
+	[58861] = "ctrlstun",
+	
+	-- Intimidation
+	[24394] = "ctrlstun",
+	[19577] = "ctrlstun",
+	[70495] = "ctrlstun",	
+	
+	-- War Stomp
+	[20549] = "ctrlstun",
+	[19482] = "ctrlstun",
+	[31408] = "ctrlstun",
+	[31480] = "ctrlstun",	
+	
+	-- Intercept
+	[20252] = "ctrlstun",
+	[20253] = "ctrlstun",
+	[47995] = "ctrlstun",
+	
+	-- Deep Freeze
+	[44572] = "ctrlstun",
+	[58534] = "ctrlstun",
+	[71757] = "ctrlstun",
+	
+	-- Shadowfury
+	[30283] = "ctrlstun",
+	[47847] = "ctrlstun",
+	[30413] = "ctrlstun",
+	[30414] = "ctrlstun",
+	[35373] = "ctrlstun",
+	[39082] = "ctrlstun",
+	[45270] = "ctrlstun",
+	[47846] = "ctrlstun",
+	[56733] = "ctrlstun",
+	[61463] = "ctrlstun",
+	
+	-- Holy Wrath
+	[48817] = "ctrlstun",
+	[ 2812] = "ctrlstun",
+	[10318] = "ctrlstun",
+	[27139] = "ctrlstun",
+	[48816] = "ctrlstun",
+	[52836] = "ctrlstun",
+	[69934] = "ctrlstun",
+	[71134] = "ctrlstun",
+	
+	-- Inferno Effect
+	[22703] = "ctrlstun",
+	[31302] = "ctrlstun",
+	
+	-- Demon Leap (Warlock)
+	[54785] = "ctrlstun",
+	
+	-- Gnaw (Ghoul)
+	[47481] = "ctrlstun",
+	
+	-- Sting (Wasp)
+	[56626] = "ctrlstun",
+	[56627] = "ctrlstun",
+	[56628] = "ctrlstun",
+	[56629] = "ctrlstun",
+	[56630] = "ctrlstun",
+	[56631] = "ctrlstun",
+	
+	-- Cheap Shot
+	[ 1833] = "ctrlstun",
+	[ 6409] = "ctrlstun",
+	[14902] = "ctrlstun",
+	[30986] = "ctrlstun",
+	[31819] = "ctrlstun",
+	[31843] = "ctrlstun",
+	[34243] = "ctrlstun",
+
+	-- Pounce
+	[27006] = "ctrlstun",
+	[ 9827] = "ctrlstun",
+	[ 9823] = "ctrlstun",
+	[ 9005] = "ctrlstun",
+	[49803] = "ctrlstun",
+		
+	-- Charge Stun
+	[ 7922] = "ctrlstun",
+	[65929] = "ctrlstun",
+
+	--[[ CONTROL STUNS 2 ]]--
+	-- Kidney Shot
+	[ 8643] = "ctrlstun2",
+	[72335] = "ctrlstun2",
+	[  408] = "ctrlstun2",
+	[27615] = "ctrlstun2",
+	[30621] = "ctrlstun2",
+	[30832] = "ctrlstun2",
+	[32864] = "ctrlstun2",
+	[41389] = "ctrlstun2",
+	[49616] = "ctrlstun2",
+
+	-- Maim
+	[22570] = "ctrlstun2",
+	[49802] = "ctrlstun2",	
 
 	--[[ RANDOM STUNS ]]--
-	[64343] = "rndstun", -- Impact
+	-- Impact
+	[64343] = "rndstun",
+	[12355] = "rndstun",
+	[11103] = "rndstun",
+	[12357] = "rndstun",
+	[12358] = "rndstun",
+	
 	[39796] = "rndstun", -- Stoneclaw Stun
-	[11210] = "rndstun", -- Improved Polymorph (rank 1)
-	[12592] = "rndstun", -- Improved Polymorph (rank 2)
+	
+	--[11210] = "rndstun", -- Improved Polymorph (rank 1)
+	--[12592] = "rndstun", -- Improved Polymorph (rank 2)
 
 	--[[ CYCLONE ]]--
-	[33786] = "cyclone", -- Cyclone
+	[33786] = "cyclone",
+	[65859] = "cyclone",
 
 	--[[ ROOTS ]]--
-	[33395] = "ctrlroot", -- Freeze (Water Elemental)
-	[50245] = "ctrlroot", -- Pin (Crab)
-	[  122] = "ctrlroot", -- Frost Nova
-	[  339] = "ctrlroot", -- Entangling Roots
-	[19975] = "ctrlroot", -- Nature's Grasp (Uses different spellIDs than Entangling Roots for the same spell)
-	[64695] = "ctrlroot", -- Earthgrab (Storm, Earth and Fire talent)
-	[ 4167] = "ctrlroot", -- Web (Spider)
-	[54706] = "ctrlroot",	-- Venom Web Spray (Silithid)
-	[19306] = "ctrlroot", -- Counterattack
-	[11190] = "ctrlroot", -- Improved Cone of Cold (rank 1)
-	[12489] = "ctrlroot", -- Improved Cone of Cold (rank 2)
+	-- Freeze (Water Elemental or other sources)
+	[33395] = "ctrlroot",
+	[63685] = "ctrlroot",
+	[40875] = "ctrlroot",
+	[62469] = "ctrlroot",
+	
+	-- Pin (Crab)
+	[50245] = "ctrlroot",
+	[53544] = "ctrlroot",
+	[53545] = "ctrlroot",
+	[53546] = "ctrlroot",
+	[53547] = "ctrlroot",
+	[53548] = "ctrlroot",
+	
+	-- Frost Nova
+	[22645] = "ctrlroot",
+	[32192] = "ctrlroot",
+	[42917] = "ctrlroot",
+	[44177] = "ctrlroot",
+	[61462] = "ctrlroot",
+	[70209] = "ctrlroot",
+	[  122] = "ctrlroot",
+	[  865] = "ctrlroot",
+	[ 1194] = "ctrlroot",
+	[ 1225] = "ctrlroot",
+	[ 6131] = "ctrlroot",
+	[ 6132] = "ctrlroot",
+	[ 9915] = "ctrlroot",
+	[10230] = "ctrlroot",
+	[10231] = "ctrlroot",
+	[11831] = "ctrlroot",
+	[12674] = "ctrlroot",
+	[12748] = "ctrlroot",
+	[14907] = "ctrlroot",
+	
+	-- Entangling Roots
+	[53308] = "ctrlroot",
+	[53313] = "ctrlroot",
+	[  339] = "ctrlroot",
+	[ 1062] = "ctrlroot",
+	[ 5195] = "ctrlroot",
+	[ 5196] = "ctrlroot",
+	[ 9852] = "ctrlroot",
+	[ 9853] = "ctrlroot",
+	[11922] = "ctrlroot",
+	[12747] = "ctrlroot",
+	[19970] = "ctrlroot",
+	[19971] = "ctrlroot",
+	[19972] = "ctrlroot",
+	[19973] = "ctrlroot",
+	[19974] = "ctrlroot",
+	[19975] = "ctrlroot", -- Nature's Grasp
+	[20654] = "ctrlroot",
+	[20699] = "ctrlroot",	
+		
+	-- Earthgrab
+	[64695] = "ctrlroot",
+	[ 8377] = "ctrlroot",
+	[31983] = "ctrlroot",
+	
+	-- Web (Spider)
+	[ 4167] = "ctrlroot",
+	
+	-- Venom Web Spray
+	[55509] = "ctrlroot",
+	[54706] = "ctrlroot", -- Silithid
+	[55505] = "ctrlroot",
+	[55506] = "ctrlroot",
+	[55507] = "ctrlroot",
+	[55508] = "ctrlroot",
+	
+	
+	-- Counterattack
+	[52883] = "ctrlroot",
+	[19306] = "ctrlroot",
+	[20909] = "ctrlroot",
+	[20910] = "ctrlroot",
+	[27067] = "ctrlroot",
+	[48998] = "ctrlroot",
+	[48999] = "ctrlroot",
+	[52881] = "ctrlroot",
+	
+	-- Improved Cone of Cold
+	[11190] = "ctrlroot",
+	[12489] = "ctrlroot",
+	[12490] = "ctrlroot",
 	
 	--[[ RANDOM ROOTS ]]--
-	[23694] = "rndroot", -- Improved Hamstring -- FIXME: to check
-	[44745] = "rndroot", -- Shattered Barrier (rank 1)
-	[54787] = "rndroot", -- Shattered Barrier (rank 2)
-
+	-- Improved Hamstring -- FIXME: to check
+	[23694] = "rndroot",
+	[12289] = "rndroot",
+	[12668] = "rndroot",
+	[23695] = "rndroot",	
+	
+	-- Shattered Barrier
+	[44745] = "rndroot", -- (rank 1)
+	[54787] = "rndroot", -- (rank 2)
+	[55080] = "rndroot",
+	
 	--[[ HORROR ]]--
-	[ 6789] = "horror", -- Death Coil
-	[64044] = "horror", -- Psychic Horror
-
+	-- Death Coil
+	[47860] = "horror",
+	[ 6789] = "horror",
+	[17925] = "horror",
+	[17926] = "horror",
+	
+	-- Psychic Horror
+	[64044] = "horror",
+	
 	--[[ MISC ]]--
-	[19503] = "scatters",   -- Scatter Shot
-	[31661] = "dragons",    -- Dragon's Breath
-	[  605] = "mc",         -- Mind Control
-	[  710] = "banish",     -- Banish
-	[19185] = "entrapment", -- Entrapment
-	[64804] = "entrapment", -- Entrapment 2
+	-- Scatter Shot
+	[19503] = "scatters",
+	[23601] = "scatters",
+	[36732] = "scatters",
+	[37506] = "scatters",
+	[46681] = "scatters",
+	[50733] = "scatters",	
+	
+	-- Dragon's Breath
+	[42950] = "dragons",
+	[29964] = "dragons",
+	[31661] = "dragons",
+	[33041] = "dragons",
+	[33042] = "dragons",
+	[33043] = "dragons",	
+	[35250] = "dragons",
+	[35289] = "dragons",
+	[42949] = "dragons",	
+	
+	-- Mind Control
+	[  605] = "mc",
+	[11446] = "mc",
+	[43550] = "mc",
+	[67229] = "mc",
+	
+	-- Banish
+	[  710] = "banish",
+	[ 8994] = "banish",
+	[18647] = "banish",
+	[27565] = "banish",
+	[30231] = "banish",
+	[35182] = "banish",
+	[37527] = "banish",
+	[37546] = "banish",
+	[37833] = "banish",
+	[38009] = "banish",
+	[38376] = "banish",
+	[38791] = "banish",
+	[39622] = "banish",
+	[39674] = "banish",
+	[40370] = "banish",	
+	
+	-- Entrapment
+	[19185] = "entrapment",
+	[64804] = "entrapment",
+	[19184] = "entrapment",
+	[19387] = "entrapment",
+	[19388] = "entrapment",
+	[64803] = "entrapment",	
 }
 
 -- DR Category names
 Data.categoryNames = {
 	["banish"] = L["Banish"],
 	["ctrlstun"] = L["Controlled stuns"],
+	["ctrlstun2"] = L["Controlled stuns 2"],
 	["cyclone"] = L["Cyclone"],
 	["disarm"] = L["Disarms"],
 	["disorient"] = L["Disorients"],
@@ -202,6 +741,7 @@ Data.categoryNames = {
 -- Categories that have DR in PvE as well as PvP
 Data.pveDR = {
 	["ctrlstun"] = true,
+	["ctrlstun2"] = true,
 	["rndstun"] = true,
 	["taunt"] = true,
 	["cyclone"] = true,

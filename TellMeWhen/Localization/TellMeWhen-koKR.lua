@@ -123,6 +123,7 @@ L["Disoriented"] = "혼란"
 L["DR-Banish"] = "추방" -- Needs review
 L["DR-ControlledRoot"] = "군중 제어 묶기" -- Needs review
 L["DR-ControlledStun"] = "군중 제어 기절" -- Needs review
+L["DR-ControlledStun2"] = "군중 제어 기절 2" -- Needs review
 L["DR-Cyclone"] = "회오리 바람" -- Needs review
 L["DR-Disarm"] = "무장 해제" -- Needs review
 L["DR-DragonsBreath"] = "용의 숨결" -- Needs review

@@ -2851,21 +2851,22 @@ function TMW:ProcessEquivalencies()
 	if DRData then
 		local myCategories = {
 			ctrlstun   = "DR-ControlledStun",
+			ctrlstun2  = "DR-ControlledStun2",
 			scatters   = "DR-Scatter",
 			fear 	   = "DR-Fear",
-			rndstun	= "DR-RandomStun",
-			silence	= "DR-Silence",
+			rndstun	   = "DR-RandomStun",
+			silence	   = "DR-Silence",
 			banish 	   = "DR-Banish",
 			mc 		   = "DR-MindControl",
 			entrapment = "DR-Entrapment",
 			taunt 	   = "DR-Taunt",
 			disarm 	   = "DR-Disarm",
 			horror 	   = "DR-Horrify",
-			cyclone	= "DR-Cyclone",
-			rndroot	= "DR-RandomRoot",
+			cyclone	   = "DR-Cyclone",
+			rndroot	   = "DR-RandomRoot",
 			disorient  = "DR-Disorient",
 			ctrlroot   = "DR-ControlledRoot",
-			dragons	= "DR-DragonsBreath",
+			dragons	   = "DR-DragonsBreath",
 		}
 		if not GetSpellInfo(74347) then -- invalid
 			DRData.spells[74347] = nil

@@ -45,7 +45,6 @@ for spellID, category in pairs(DRSpells) do
 	end
 end
 
-
 local Type = TMW.Classes.IconType:New()
 Type.type = "dr"
 LibStub("AceEvent-3.0"):Embed(Type)
@@ -76,11 +75,11 @@ Type.RelevantSettings = {
 }
 
 
-
 function Type:Update()
 	db = TMW.db
 	ClockGCD = db.profile.ClockGCD
 end
+
 
 local function DR_OnEvent(icon, event, timestamp, suffix, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellID, spellName, spellSchool, auraType)
 	if event == "COMBAT_LOG_EVENT_UNFILTERED" then

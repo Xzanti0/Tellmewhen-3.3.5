@@ -7245,11 +7245,39 @@ local Module = SUG:NewModule("wpnenchant", SUG:GetModule("default"), "AceEvent-3
 Module.noMin = true
 Module.ItemIDs = {
 	-- item enhancements
-	43233,	--Deadly Poison
+	2892,	--Deadly Poison
+	2893,	--Deadly Poison II
+	8984,	--Deadly Poison III
+	8985,	--Deadly Poison IV
+	20844,	--Deadly Poison V
+	22053,	--Deadly Poison VI
+	22054,	--Deadly Poison VII
+	43232,	--Deadly Poison VIII
+	43233,	--Deadly Poison IX
+	
 	3775,	--Crippling Poison
 	5237,	--Mind-Numbing Poison
-	43235,	--Wound Poison
-	43231,	--Instant Poison
+	
+	10918,  --Wound Poison
+	10920,  --Wound Poison II
+	10921,  --Wound Poison III
+	10922,  --Wound Poison IV
+	22055,  --Wound Poison V
+	43234,  --Wound Poison VI
+	43235,	--Wound Poison VII
+	
+	21835,  --Anesthetic Poison
+	43237,  --Anesthetic Poison II
+	
+	6947,	--Instant Poison
+	6949,	--Instant Poison II
+	6950,	--Instant Poison III
+	8926,	--Instant Poison IV
+	8927,	--Instant Poison V
+	8928,	--Instant Poison VI
+	21927,	--Instant Poison VII
+	43230,	--Instant Poison VIII
+	43231,	--Instant Poison IX
 
 	31535,	--Bloodboil Poison
 
@@ -7319,11 +7347,55 @@ Module.ItemIDs = {
 }
 Module.SpellIDs = {
 	-- Shaman Enchants
-	8024,	--Flametongue Weapon
-	8033,	--Frostbrand Weapon
-	8232,	--Windfury Weapon
-	51730,	--Earthliving Weapon
-	8017,	--Rockbiter Weapon
+	
+	--Flametongue Weapon (rank 1 - 10)
+	8024,
+	8027,
+	8030,
+	16339,
+	16341,
+	16342,
+	25489,
+	58785,
+	58789,
+	58790,
+	
+	--Frostbrand Weapon (rank 1-9)
+	8033,
+	8038,
+	10456,
+	16355,
+	16356,
+	25500,
+	58794,
+	58795,
+	58796,
+	
+	--Windfury Weapon (rank 1-10)
+	8232,
+	8235,
+	10486,
+	16362,
+	25505,
+	32911,
+	35886,
+	58801,
+	58803,
+	58804,
+	
+	--Earthliving Weapon (rank 1-6)
+	51730,
+	51988,
+	51991,
+	51992,
+	51993,
+	51994,
+	
+	--Rockbiter Weapon (rank 1-4)
+	8017,
+	8018,
+	8019,
+	10399,
 }
 function Module:OnInitialize()
 	self.Items = {}

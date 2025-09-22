@@ -1478,6 +1478,7 @@ L["TANK"] = "Tank"
 
 L["DR-RandomStun"] = "Random stuns"
 L["DR-ControlledStun"] = "Controlled stuns"
+L["DR-ControlledStun2"] = "Controlled stuns 2"
 L["DR-Scatter"] = "Scatter Shot"
 L["DR-Fear"] = "Fears"
 L["DR-Silence"] = "Silences"

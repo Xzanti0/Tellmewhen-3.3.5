@@ -201,6 +201,7 @@ L["Disoriented"] = "Desorientado"
 L["DR-Banish"] = "Banimento" -- Needs review
 L["DR-ControlledRoot"] = "Raízes controladas" -- Needs review
 L["DR-ControlledStun"] = "Tontura controlada" -- Needs review
+L["DR-ControlledStun2"] = "Tontura controlada 2" -- Needs review
 L["DR-Cyclone"] = "Ciclone" -- Needs review
 L["DR-Disarm"] = "Desarmados" -- Needs review
 L["DR-Disorient"] = "Desorientados" -- Needs review
