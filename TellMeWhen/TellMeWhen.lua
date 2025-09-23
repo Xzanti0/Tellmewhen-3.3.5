@@ -909,6 +909,8 @@ TMW.Defaults = {
 						UnAlpha					= 1,
 						AlphaEnabled		    = false,
 						UnAlphaEnabled			= false,
+						ShowOC		            = { ["r"] = 1, ["g"] = 1, ["b"] = 1},
+						HideOC		            = { ["r"] = 1, ["g"] = 1, ["b"] = 1},
 						ConditionAlpha			= 0,
 						RangeCheck				= false,
 						ManaCheck				= false,

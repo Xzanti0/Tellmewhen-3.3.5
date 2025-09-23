@@ -169,28 +169,26 @@ local function CLEU_OnEvent(icon, event, timestamp, suffix, sourceGUID, sourceNa
 			end
 		end
 
-		--local spellID, spellName = arg1, arg2 -- this may or may not be true, depends on the suffix
-
-		local tex, spellID, spellName, extraID, extraName
+		local tex, extraID, extraName
 		if suffix == "SWING_DAMAGE" or suffix == "SWING_MISSED" then
 			spellName = ACTION_SWING
 			-- dont define spellID here so that ACTION_SWING will be used in %s substitutions
 			tex = SpellTextures[6603]
 		elseif suffix == "ENCHANT_APPLIED" or suffix == "ENCHANT_REMOVED" then
-			spellID = arg1
-			spellName = arg2
+			--spellID = arg1
+			--spellName = arg2
 			tex = GetItemIcon(arg2)
 		elseif suffix == "SPELL_INTERRUPT" or suffix == "SPELL_DISPEL" or suffix == "SPELL_DISPEL_FAILED" or suffix == "SPELL_STOLEN" then
 			extraID = arg1 -- the spell used (kick, cleanse, spellsteal)
 			extraName = arg2
-			spellID = arg4 -- the other spell (polymorph, greater heal, arcane intellect, corruption)
-			spellName = arg5
+			--spellID = arg4 -- the other spell (polymorph, greater heal, arcane intellect, corruption)
+			--spellName = arg5
 			tex = SpellTextures[spellID]
 		elseif suffix == "SPELL_AURA_BROKEN_SPELL" or suffix == "SPELL_INTERRUPT_SPELL" then
 			extraID = arg4 -- the spell that broke it
 			extraName = arg5
-			spellID = arg1 -- the spell that was broken
-			spellName = arg2
+			--spellID = arg1 -- the spell that was broken
+			--spellName = arg2
 			tex = SpellTextures[spellID]
 		--TODO: wotlk backport - disabling this for now
 		--elseif suffix == "ENVIRONMENTAL_DAMAGE" then
@@ -203,45 +201,14 @@ local function CLEU_OnEvent(icon, event, timestamp, suffix, sourceGUID, sourceNa
 				sourceUnit = destUnit -- clone it
 			end
 		else
-			spellID = arg1
-			spellName = arg2
-			--[[--"RANGE_DAMAGE", -- normal
-			--"RANGE_MISSED", -- normal
-			--"SPELL_DAMAGE", -- normal
-			--"SPELL_MISSED", -- normal
+			--spellID = arg1
+			--spellName = arg2
+			--[[
 			--"SPELL_REFLECT", -- normal BUT  NOT ACTUALLY AN EVENT
-			--"SPELL_EXTRA_ATTACKS", -- normal
-			--"SPELL_HEAL", -- normal
-			--"SPELL_ENERGIZE", -- normal
-			--"SPELL_DRAIN", -- normal
-			--"SPELL_LEECH", -- normal
-			--"SPELL_AURA_APPLIED", -- normal
-			--"SPELL_AURA_REFRESH", -- normal
-			--"SPELL_AURA_REMOVED", -- normal
-
-			--"SPELL_PERIODIC_DAMAGE", -- normal
-			--"SPELL_PERIODIC_DRAIN", -- normal
-			--"SPELL_PERIODIC_ENERGIZE", -- normal
-			--"SPELL_PERIODIC_LEECH", -- normal
-			--"SPELL_PERIODIC_HEAL", -- normal
-			--"SPELL_PERIODIC_MISSED", -- normal
-			--"DAMAGE_SHIELD", -- normal
-			--"DAMAGE_SHIELD_MISSED", -- normal
-			--"DAMAGE_SPLIT", -- normal
-			--"SPELL_INSTAKILL", -- normal
-			--"SPELL_SUMMON" -- normal
-			--"SPELL_RESURRECT" -- normal
-			--"SPELL_CREATE" -- normal
-			--"SPELL_DURABILITY_DAMAGE" -- normal
-			--"SPELL_DURABILITY_DAMAGE_ALL" -- normal
-			--"SPELL_AURA_BROKEN" -- normal
 			--"SPELL_AURA_APPLIED_DOSE"					--SEMI-NORMAL, CONSIDER SPECIAL IMPLEMENTATION
 			--"SPELL_AURA_REMOVED_DOSE"					--SEMI-NORMAL, CONSIDER SPECIAL IMPLEMENTATION
-			--"SPELL_CAST_FAILED" -- normal
-			--"SPELL_CAST_START" -- normal
-			--"SPELL_CAST_SUCCESS" -- normal
 			]]
-		end
+		end	
 		tex = tex or SpellTextures[spellID] or SpellTextures[spellName] -- [spellName] should never be used, but whatever
 
 		local NameHash = icon.NameHash
