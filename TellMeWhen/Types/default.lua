@@ -58,21 +58,17 @@ end
 
 function Type:DragReceived(icon, t, data, subType)
 	local ics = icon:GetSettings()
-
 	local newType, input
 	if t == "spell" then
-		--_, input = GetSpellBookItemInfo(data, subType)
-		--TODO: try to fix (Wotlk backport)
-		local name, rank, icon, _, _, _, _, minRange,range = GetSpellInfo(data, subType)
-		input = name
-		
+		input = GetSpellName(data, subType)
 		newType = "cooldown"
 	elseif t == "item" then
 		input = data
 		newType = "item"
 	end
-	if not (input and newType) then return end
-
+	if not (input and newType) then 
+	    return 
+	end
 	ics.Type = newType
 	ics.Enabled = true
 	ics.Name = TMW:CleanString(ics.Name .. ";" .. input)

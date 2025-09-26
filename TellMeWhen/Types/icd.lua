@@ -164,21 +164,13 @@ end
 
 function Type:DragReceived(icon, t, data, subType)
 	local ics = icon:GetSettings()
-
 	if t ~= "spell" then
 		return
 	end
-
-	--local _, spellID = GetSpellBookItemInfo(data, subType)
-	local name, rank, icon, _, _, _, _, minRange,range = GetSpellInfo(data, subType)	
-	--if not spellID then
-	--	return
-	--end
+	local name = GetSpellName(data, subType)
 	if not name then
 		return
 	end
-	
-	--ics.Name = TMW:CleanString(ics.Name .. ";" .. spellID)
 	ics.Name = TMW:CleanString(ics.Name .. ";" .. name)
 	if TMW.CI.ic ~= icon then
 		TMW.IE:Load(nil, icon)

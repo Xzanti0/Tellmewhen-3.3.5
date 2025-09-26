@@ -1722,17 +1722,16 @@ end
 ---------- Spell/Item Dragging ----------
 function ID:TextureDragReceived(icon, t, data, subType)
 	local ics = icon:GetSettings()
-
-	local _, input
+	local spellName, input
 	if t == "spell" then
-		_, input = GetSpellBookItemInfo(data, subType)
+		--_, input = GetSpellBookItemInfo(data, subType)
+		spellName, input = GetSpellName(data, subType)
 	elseif t == "item" then
 		input = GetItemIcon(data)
 	end
 	if not input then
 		return
 	end
-
 	ics.CustomTex = TMW:CleanString(input)
 	return true -- signal success
 end
@@ -5965,17 +5964,16 @@ function SUG:UNIT_PET(event, unit)
 	if unit == "player" and HasPetSpells() then
 		local Cache = TMW.ClassSpellCache.PET
 		local i = 1
-		--while true do
+		while true do
 			--local _, id = GetSpellBookItemInfo(i, "pet")
-			--TODO: try to fix (Wotlk backport)
-			--
-			--if id then
-			--	Cache[id] = pclass
-			--else
-			--	break
-			--end
-		--	i=i+1
-		--end
+			local spellName, spellRank = GetSpellName(i, BOOKTYPE_PET or "pet")
+			if spellName then
+				Cache[spellName] = pclass
+			else
+				break
+			end
+			i=i+1
+		end
 		SUG.updatePlayerSpells = 1
 	end
 end
@@ -6007,17 +6005,12 @@ function SUG:PLAYER_TALENT_UPDATE()
 	local _, _, offs, numspells = GetSpellTabInfo(4)
 	local _, race = UnitRace("player")
 	for i = 1, offs + numspells do
-	--[[
-		local _, id = GetSpellBookItemInfo(i, "player")
-		if id then
-			local name, rank = GetSpellInfo(id)
-			if rank == RACIAL then
-				TMW.ClassSpellCache.RACIAL[id] = race
-			elseif i > endgeneral then
-				t[id] = 1
-			end
+	    local spellName, spellRank = GetSpellName(i, BOOKTYPE_SPELL or "spell")
+		if spellRank == RACIAL then
+			TMW.ClassSpellCache.RACIAL[spellName] = race
+		elseif i > endgeneral then
+			t[spellName] = 1
 		end
-]]--
 	end
 	SUG.updatePlayerSpells = 1
 end

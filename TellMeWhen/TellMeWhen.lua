@@ -50,8 +50,8 @@ TELLMEWHEN_MAXGROUPS = 1 	--this is a default, used by SetTheory (addon), so don
 TELLMEWHEN_MAXROWS = 20
 
 ---------- Upvalues ----------
-local GetSpellCooldown, GetSpellInfo, GetSpellTexture, GetSpellLink, GetSpellBookItemInfo =
-	  GetSpellCooldown, GetSpellInfo, GetSpellTexture, GetSpellLink, GetSpellBookItemInfo
+local GetSpellCooldown, GetSpellInfo, GetSpellTexture, GetSpellLink =
+	  GetSpellCooldown, GetSpellInfo, GetSpellTexture, GetSpellLink
 local GetItemInfo, GetInventoryItemID, GetItemIcon =
 	  GetItemInfo, GetInventoryItemID, GetItemIcon
 local GetActiveTalentGroup, GetNumTalentTabs, GetNumTalents, GetTalentInfo =
