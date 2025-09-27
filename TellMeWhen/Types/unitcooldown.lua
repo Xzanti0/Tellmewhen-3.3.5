@@ -130,25 +130,15 @@ local resetsOnCast = {
 		[36554] = 1,
 		[1766] = 1,
 		[51722] = 1,
-		[76577] = 1,
 	},
-	[60970] = { --some warrior thing that resets intercept
+	[60970] = { --heroic fury - resets intercept
 		[20252] = 1,
 	},
-	[50334] = { --druid berserk or something
+	[50334] = { --druid berserk - resets bear mangle
 		[33878] = 1,
 	},
 }
 local resetsOnAura = {
-	[81162] = { -- will of the necropolis
-		[48982] = 1,
-	},
-	[93400] = { -- shooting stars
-		[78674] = 1,
-	},
-	[93622] = { -- lacerate or something
-		[33878] = 1,
-	},
 	[48517] = { -- solar eclipse
 		[16886] = 1,
 	},
@@ -161,10 +151,6 @@ local resetsOnAura = {
 	[50227] = { -- sword and board
 		[23922] = 1,
 	},
-	[52437] = { -- sudden death
-		[86346] = 1,
-	},
-
 }
 
 local WOTLKHACK_UNIT_SPELLCAST_SUCCEEDED = function(eventsuffix, unit, spellName, spellRankOrType, spellID)

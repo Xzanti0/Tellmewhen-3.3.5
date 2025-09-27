@@ -19,15 +19,13 @@ if not TMW then return end
 local L = TMW.L
 
 local db
-local strlower =
-	  strlower
+local strlower = strlower
 local print = TMW.print
 local SpellTextures = TMW.SpellTextures
 
 local pGUID = UnitGUID("player") -- this isnt actually defined right here (it returns nil), so I will do it later too
 local clientVersion = select(4, GetBuildInfo())
 local strlowerCache = TMW.strlowerCache
-
 
 local Type = TMW.Classes.IconType:New()
 Type.type = "icd"

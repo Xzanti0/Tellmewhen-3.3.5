@@ -2112,7 +2112,7 @@
 			</Frame>
 
 			<Frame name="$parentSuggest" parentKey="Suggest" hidden="true" enableMouse="true">
-				<Size x="220" y="400"/>
+				<Size x="320" y="400"/>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="-12"/>
 					<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMRIGHT" x="-12"/>

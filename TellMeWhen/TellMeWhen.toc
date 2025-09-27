@@ -44,6 +44,7 @@ Lib\AceSerializer-3.0\AceSerializer-3.0.xml
 Lib\LibSharedMedia-3.0\lib.xml
 Lib\libdatabroker-1-1\LibDataBroker-1.1.lua
 Lib\DRData-1.0\DRData-1.0.xml
+Lib\LibInternalCooldowns\LibInternalCooldowns.lua
 #@end-no-lib-strip@
 
 Localization\TellMeWhen-enUS.lua

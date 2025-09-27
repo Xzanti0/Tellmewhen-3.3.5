@@ -21,6 +21,7 @@ TMW.WidthCol1 = 170
 ---------- Libraries ----------
 local LSM = LibStub("LibSharedMedia-3.0")
 local LMB = LibStub("Masque", true) or (LibMasque and LibMasque("Button"))
+local LiCD = LibStub("LibInternalCooldowns", true)
 
 
 ---------- Upvalues ----------
@@ -6936,9 +6937,36 @@ end
 local Module = SUG:NewModule("spellwithduration", SUG:GetModule("spell"))
 Module.doAddColon = true
 local MATCH_RECAST_TIME_MIN, MATCH_RECAST_TIME_SEC
+local function myformatTime(totalSeconds)
+	local minutes = math.floor(totalSeconds / 60)
+	local seconds = totalSeconds % 60
+	return string.format("%d:%02d", minutes, seconds)
+end
 function Module:OnInitialize()
 	MATCH_RECAST_TIME_MIN = SPELL_RECAST_TIME_MIN:gsub("%%%.3g", "([%%d%%.]+)")
 	MATCH_RECAST_TIME_SEC = SPELL_RECAST_TIME_SEC:gsub("%%%.3g", "([%%d%%.]+)")
+end
+function Module:Entry_AddToList_1(f, id)
+	if tonumber(id) then --sanity check
+		local name = GetSpellInfo(id)
+        local dur = myformatTime(LiCD.cooldowns[id] or 45)
+		f.Name:SetText(name .. " |cFFbbbbbb: " .. dur .. " |r")
+		f.ID:SetText(id)
+
+		f.tooltipmethod = "SetSpellByID"
+		f.tooltiparg = id
+
+		if pclassSpellCache[id] --[[name and GetSpellTexture(name)]] then
+			--f.insert = SUG.inputType == "number" and id or name
+			--f.insert2 = SUG.inputType ~= "number" and id or name
+			f.insert = name or id
+		    f.insert2 = id or name
+		else
+			f.insert = name or id
+		    f.insert2 = id or name
+		end
+		f.Icon:SetTexture(SpellTextures[id])
+	end
 end
 function Module:Entry_OnClick(f, button)
 	local insert
@@ -6952,7 +6980,6 @@ function Module:Entry_OnClick(f, button)
 
 	for _, text in TMW:Vararg(RT2:GetText(), RT3:GetText()) do
 		if text then
-
 			local mins = text:match(MATCH_RECAST_TIME_MIN)
 			local secs = text:match(MATCH_RECAST_TIME_SEC)
 			if mins then
@@ -6970,12 +6997,15 @@ function Module:Entry_OnClick(f, button)
 		dur = "2:00"
 	end
 
+	if not dur then
+		dur = myformatTime(LiCD.cooldowns[spellID] or 45)
+	end
+
 	if button == "RightButton" and f.insert2 then
 		insert = f.insert2
 	else
 		insert = f.insert
 	end
-
 	self:Entry_Insert(insert, dur)
 end
 function Module:Entry_Insert(insert, duration)
