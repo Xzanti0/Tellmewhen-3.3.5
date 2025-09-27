@@ -1425,6 +1425,7 @@ function TMW:OnInitialize()
 		StaticPopup_Show("TMW_RESTARTNEEDED", TELLMEWHEN_VERSION_FULL, "TimerBar.lua")
 	end
 
+    --TODO: wotlk backport - figure this out
 	if LibStub("LibButtonFacade", true) and select(6, GetAddOnInfo("Masque")) == "MISSING" then
 		TMW.Warn("TellMeWhen no longer supports ButtonFacade. If you wish to continue to skin your icons, please upgrade to ButtonFacade's successor, Masque.")
 	end
@@ -1628,7 +1629,7 @@ function TMW:OnCommReceived(prefix, text, channel, who)
 end
 
 
-function TMW:OnUpdate(elapsed)					-- THE MAGICAL ENGINE OF DOING EVERYTHING
+function TMW:OnUpdate(elapsed)-- THE MAGICAL ENGINE OF DOING EVERYTHING
 	time = GetTime()
 	CNDTEnv.time = time
 	TMW.time = time
@@ -1651,10 +1652,7 @@ function TMW:OnUpdate(elapsed)					-- THE MAGICAL ENGINE OF DOING EVERYTHING
 				end
 			end
 		end
-
-
 		if Locked then
-
 			for i = 1, #GroupsToUpdate do
 				-- GroupsToUpdate only contains groups with conditions
 				local group = GroupsToUpdate[i]
@@ -1676,6 +1674,8 @@ function TMW:OnUpdate(elapsed)					-- THE MAGICAL ENGINE OF DOING EVERYTHING
 					group.iconSortNeeded = nil
 				end
 			end
+		--else
+            --TMW:Update()
 		end
 		
 		TMW:Fire("TMW_ONUPDATE_TIMECONSTRAINED", time, Locked)
@@ -1691,10 +1691,10 @@ function TMW:OnUpdate(elapsed)					-- THE MAGICAL ENGINE OF DOING EVERYTHING
 	TMW:Fire("TMW_ONUPDATE", time, Locked)
 end
 
-
 function TMW:Update()
-	if not TMW.EnteredWorld then return end
-
+	if not TMW.EnteredWorld then 
+	    return 
+	end
 	time = GetTime() 
 	TMW.time = time
 	LastUpdate = 0
@@ -2802,7 +2802,10 @@ function TMW.OnGCD(d)
 end
 
 function TMW:PLAYER_ENTERING_WORLD()
-	if not TMW.VarsLoaded then return end
+	if not TMW.VarsLoaded then 
+	    return 
+	end
+
 	TMW.EnteredWorld = true
 
 	local NumRealRaidMembers = GetRealNumRaidMembers()
@@ -2821,6 +2824,9 @@ function TMW:PLAYER_ENTERING_WORLD()
 		TMW.OldNumRaidMembers = NumRaidMembers
 		TMW:SendCommMessage("TMWV", "M:" .. TELLMEWHEN_VERSION .. "^m:" .. TELLMEWHEN_VERSION_MINOR .. "^R:" .. TELLMEWHEN_VERSIONNUMBER .. "^", "BATTLEGROUND")
 	end
+	
+	--TODO: wotlk backport - added so addon appears when doing /reload. see if there is a better way to handle this?
+	TMW:Update()
 end
 function TMW:COMBAT_LOG_EVENT_UNFILTERED(event, timestamp, suffix, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellID, spellName, spellSchool, buffOrDebuff)
 	-- This is only used for the suggester, but i want to to be listening all the times for auras, not just when you load the options
@@ -3288,7 +3294,8 @@ end
 
 
 
-EVENTS = TMW:NewModule("Events", "AceEvent-3.0") TMW.EVENTS = EVENTS
+EVENTS = TMW:NewModule("Events", "AceEvent-3.0") 
+TMW.EVENTS = EVENTS
 EVENTS.QueuedIcons = {}
 do
 	EVENTS.OnIconShowHideHandlers = {}
@@ -3296,17 +3303,14 @@ do
 	EVENTS.OnIconShowHideManager:UpdateTable_Set(EVENTS.OnIconShowHideHandlers)
 end
 function EVENTS:ProcessAndDelegateIconEventSettings(icon, event, eventSettings)
-	
 	local success = self:ProcessIconEventSettings(event, eventSettings)
 
-	
 	if success and (event == "OnIconShow" or event == "OnIconHide") then
 		if icon.Enabled then
 			self.OnIconShowHideManager:UpdateTable_Register(icon)
 		end
 		TMW:RegisterCallback("TMW_ICON_SHOWN_CHANGED", EVENTS) -- register to EVENTS, not self.
 	end
-
 	return success
 end
 function EVENTS:TMW_ICON_SHOWN_CHANGED(_, ic, event)

@@ -6937,11 +6937,6 @@ end
 local Module = SUG:NewModule("spellwithduration", SUG:GetModule("spell"))
 Module.doAddColon = true
 local MATCH_RECAST_TIME_MIN, MATCH_RECAST_TIME_SEC
-local function myformatTime(totalSeconds)
-	local minutes = math.floor(totalSeconds / 60)
-	local seconds = totalSeconds % 60
-	return string.format("%d:%02d", minutes, seconds)
-end
 function Module:OnInitialize()
 	MATCH_RECAST_TIME_MIN = SPELL_RECAST_TIME_MIN:gsub("%%%.3g", "([%%d%%.]+)")
 	MATCH_RECAST_TIME_SEC = SPELL_RECAST_TIME_SEC:gsub("%%%.3g", "([%%d%%.]+)")
@@ -6949,7 +6944,7 @@ end
 function Module:Entry_AddToList_1(f, id)
 	if tonumber(id) then --sanity check
 		local name = GetSpellInfo(id)
-        local dur = myformatTime(LiCD.cooldowns[id] or 45)
+        local dur = TMW:FormatSeconds(LiCD.cooldowns[id] or 45, true)
 		f.Name:SetText(name .. " |cFFbbbbbb: " .. dur .. " |r")
 		f.ID:SetText(id)
 
@@ -6998,7 +6993,7 @@ function Module:Entry_OnClick(f, button)
 	end
 
 	if not dur then
-		dur = myformatTime(LiCD.cooldowns[spellID] or 45)
+		dur = TMW:FormatSeconds(LiCD.cooldowns[spellID] or 45, true)
 	end
 
 	if button == "RightButton" and f.insert2 then
