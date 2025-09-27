@@ -2826,7 +2826,7 @@ function TMW:PLAYER_ENTERING_WORLD()
 	end
 	
 	--TODO: wotlk backport - added so addon appears when doing /reload. see if there is a better way to handle this?
-	TMW:Update()
+	TMW:ScheduleUpdate(1)
 end
 function TMW:COMBAT_LOG_EVENT_UNFILTERED(event, timestamp, suffix, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellID, spellName, spellSchool, buffOrDebuff)
 	-- This is only used for the suggester, but i want to to be listening all the times for auras, not just when you load the options
