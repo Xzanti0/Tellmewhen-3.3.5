@@ -97,6 +97,17 @@ local clientVersion = select(4, GetBuildInfo())
 local addonVersion = tonumber(GetAddOnMetadata("TellMeWhen", "X-Interface"))
 local _, pclass = UnitClass("Player")
 
+TMW_GetSpellIDFromName = function(spellName)
+    if spellName then
+		local spellLink = GetSpellLink(spellName)
+		if spellLink then
+			local spellID = strmatch(spellLink, "spell:(%d+)")
+			return tonumber(spellID)
+		end
+	end
+	return nil
+end
+
 TMW_GetSpellTexture = function(spellIDOrName)
 	return select(3, GetSpellInfo(spellIDOrName)) or GetSpellTexture(spellIDOrName)
 end

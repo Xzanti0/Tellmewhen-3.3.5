@@ -1725,7 +1725,11 @@ function ID:TextureDragReceived(icon, t, data, subType)
 	local spellName, input
 	if t == "spell" then
 		--_, input = GetSpellBookItemInfo(data, subType)
-		spellName, input = GetSpellName(data, subType)
+		spellName = GetSpellName(data, subType)
+		local id = TMW_GetSpellIDFromName(spellName) --drag
+		if id then
+		    input = id
+		end
 	elseif t == "item" then
 		input = GetItemIcon(data)
 	end
@@ -5781,9 +5785,12 @@ function SUG:OnInitialize()
 		SUG:SendCommMessage("TMWSUG", SUG:Serialize("RCSL"), "GUILD")
 	end
 
-	pclassSpellCache,				ClassSpellLookup,		AuraCache,		ItemCache,		SpellCache =
-	TMW.ClassSpellCache[pclass],	SUG.ClassSpellLookup,	SUG.AuraCache,	SUG.ItemCache,	SUG.SpellCache
-
+    pclassSpellCache = TMW.ClassSpellCache[pclass]
+    ClassSpellLookup = SUG.ClassSpellLookup
+    AuraCache = SUG.AuraCache
+    ItemCache = SUG.ItemCache
+    SpellCache = SUG.SpellCache
+	
 	SUG:PLAYER_ENTERING_WORLD()
 
 	local _, _, _, clientVersion = GetBuildInfo()
@@ -5968,7 +5975,10 @@ function SUG:UNIT_PET(event, unit)
 			--local _, id = GetSpellBookItemInfo(i, "pet")
 			local spellName, spellRank = GetSpellName(i, BOOKTYPE_PET or "pet")
 			if spellName then
-				Cache[spellName] = pclass
+			    local id = TMW_GetSpellIDFromName(spellName) --pet
+				if id then
+				    Cache[id] = pclass	
+				end
 			else
 				break
 			end
@@ -6006,10 +6016,13 @@ function SUG:PLAYER_TALENT_UPDATE()
 	local _, race = UnitRace("player")
 	for i = 1, offs + numspells do
 	    local spellName, spellRank = GetSpellName(i, BOOKTYPE_SPELL or "spell")
-		if spellRank == RACIAL then
-			TMW.ClassSpellCache.RACIAL[spellName] = race
-		elseif i > endgeneral then
-			t[spellName] = 1
+		local id = TMW_GetSpellIDFromName(spellName) --spells
+		if id then
+			if spellRank == RACIAL then
+				TMW.ClassSpellCache.RACIAL[id] = race
+			elseif i > endgeneral then
+				t[id] = 1
+			end
 		end
 	end
 	SUG.updatePlayerSpells = 1
