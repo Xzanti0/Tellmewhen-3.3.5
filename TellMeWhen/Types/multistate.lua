@@ -14,6 +14,9 @@
 -- Cybeloras of Mal'Ganis
 -- --------------------
 
+--wotlk backport: disabling for now as I see no need for this icon type
+--[[
+
 local TMW = TMW
 if not TMW then return end
 local L = TMW.L
@@ -61,18 +64,16 @@ Type.RelevantSettings = {
 Type.EventDisabled_OnUnit = true
 Type.EventDisabled_OnStack = true
 
-
 function Type:Update()
 	db = TMW.db
 	ClockGCD = db.profile.ClockGCD
 end
 
-
 local function MultiStateCD_OnEvent(icon, event)
 	if event == "ACTIONBAR_SLOT_CHANGED" then
 		local actionType, spellID = GetActionInfo(icon.Slot) -- check the current slot first, because it probably didnt change
 		if actionType == "spell" and spellID == icon.NameFirst then
-			-- do nothing
+
 		else
 			for i=1, 120 do
 				local actionType, spellID = GetActionInfo(i)
@@ -87,7 +88,6 @@ local function MultiStateCD_OnEvent(icon, event)
 end
 
 local function MultiStateCD_OnUpdate(icon, time)
-
 	local Slot = icon.Slot
 	local start, duration = GetActionCooldown(Slot)
 	if duration then
@@ -104,7 +104,6 @@ local function MultiStateCD_OnUpdate(icon, time)
 		local actionType, spellID = GetActionInfo(Slot)
 		spellID = actionType == "spell" and spellID or icon.NameFirst
 
-
 		local alpha, color
 		if (duration == 0 or OnGCD(duration)) and inrange == 1 and not nomana then
 			alpha = icon.Alpha
@@ -113,12 +112,9 @@ local function MultiStateCD_OnUpdate(icon, time)
 			alpha = icon.UnAlpha
 			color = icon:CrunchColor(false, duration, inrange, nomana)
 		end
-
-		--icon:SetInfo(alpha, color, texture, start, duration, spellChecked, reverse, count, countText, forceupdate, unit)
 		icon:SetInfo(alpha, color, GetActionTexture(Slot) or "Interface\\Icons\\INV_Misc_QuestionMark", start, duration, spellID, nil, nil, nil, nil, nil)
 	end
 end
-
 
 function Type:Setup(icon, groupID, iconID)
 	icon.NameFirst = TMW:GetSpellNames(icon, icon.Name, 1)
@@ -153,3 +149,4 @@ function Type:Setup(icon, groupID, iconID)
 end
 
 Type:Register()
+]]
