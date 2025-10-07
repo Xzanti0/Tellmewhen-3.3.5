@@ -19,9 +19,6 @@
 -- add it to the .toc, and it's done.
 --
 -- Can run as a standalone addon also, but, really, just embed it! :-)
---
--- LICENSE: ChatThrottleLib is released into the Public Domain
---
 
 local CTL_VERSION = 24
 
@@ -57,16 +54,16 @@ ChatThrottleLib.version = CTL_VERSION
 
 ------------------ TWEAKABLES -----------------
 
-ChatThrottleLib.MAX_CPS = 800			  -- 2000 seems to be safe if NOTHING ELSE is happening. let's call it 800.
-ChatThrottleLib.MSG_OVERHEAD = 40		-- Guesstimate overhead for sending a message; source+dest+chattype+protocolstuff
+ChatThrottleLib.MAX_CPS = 800	  -- 2000 seems to be safe if NOTHING ELSE is happening. let's call it 800.
+ChatThrottleLib.MSG_OVERHEAD = 40 -- Guesstimate overhead for sending a message; source+dest+chattype+protocolstuff
 
-ChatThrottleLib.BURST = 4000				-- WoW's server buffer seems to be about 32KB. 8KB should be safe, but seen disconnects on _some_ servers. Using 4KB now.
+ChatThrottleLib.BURST = 4000	  -- WoW's server buffer seems to be about 32KB. 8KB should be safe, but seen disconnects on _some_ servers. Using 4KB now.
 
-ChatThrottleLib.MIN_FPS = 20				-- Reduce output CPS to half (and don't burst) if FPS drops below this value
+ChatThrottleLib.MIN_FPS = 20	  -- Reduce output CPS to half (and don't burst) if FPS drops below this value
 
 
 local setmetatable = setmetatable
-local table_remove = table.remove
+local tremove = table.remove
 local tostring = tostring
 local GetTime = GetTime
 local math_min = math.min
@@ -77,7 +74,6 @@ local GetFramerate = GetFramerate
 local strlower = string.lower
 local unpack,type,pairs,wipe = unpack,type,pairs,wipe
 local UnitInRaid,GetNumPartyMembers = UnitInRaid,GetNumPartyMembers
-
 
 -----------------------------------------------------------------------
 -- Double-linked ring implementation
@@ -115,8 +111,6 @@ function Ring:Remove(obj)
 	end
 end
 
-
-
 -----------------------------------------------------------------------
 -- Recycling bin for pipes
 -- A pipe is a plain integer-indexed queue of messages
@@ -126,12 +120,6 @@ ChatThrottleLib.PipeBin = nil -- pre-v19, drastically different
 local PipeBin = setmetatable({}, {__mode="k"})
 
 local function DelPipe(pipe)
-	for i = #pipe, 1, -1 do
-		pipe[i] = nil
-	end
-	pipe.prev = nil
-	pipe.next = nil
-
 	PipeBin[pipe] = true
 end
 
@@ -144,8 +132,6 @@ local function NewPipe()
 	end
 	return {}
 end
-
-
 
 
 -----------------------------------------------------------------------
@@ -173,7 +159,6 @@ end
 -----------------------------------------------------------------------
 -- ChatThrottleLib:Init
 -- Initialize queues, set up frame for OnUpdate, etc
-
 
 function ChatThrottleLib:Init()
 
@@ -214,11 +199,9 @@ function ChatThrottleLib:Init()
 	if not self.securelyHooked then
 		-- Use secure hooks as of v16. Old regular hook support yanked out in v21.
 		self.securelyHooked = true
-		--SendChatMessage
 		hooksecurefunc("SendChatMessage", function(...)
 			return ChatThrottleLib.Hook_SendChatMessage(...)
 		end)
-		--SendAddonMessage
 		hooksecurefunc("SendAddonMessage", function(...)
 			return ChatThrottleLib.Hook_SendAddonMessage(...)
 		end)
@@ -295,7 +278,7 @@ end
 function ChatThrottleLib:Despool(Prio)
 	local ring = Prio.Ring
 	while ring.pos and Prio.avail > ring.pos[1].nSize do
-		local msg = table_remove(ring.pos, 1)
+		local msg = tremove(ring.pos, 1)
 		if not ring.pos[1] then  -- did we remove last msg in this pipe?
 			local pipe = Prio.Ring.pos
 			Prio.Ring:Remove(pipe)
@@ -391,7 +374,6 @@ end
 
 
 
-
 -----------------------------------------------------------------------
 -- Spooling logic
 
@@ -465,19 +447,20 @@ function ChatThrottleLib:SendAddonMessage(prio, prefix, text, chattype, target, 
 		error('ChatThrottleLib:SendAddonMessage(): callbackFn: expected function, got '..type(callbackFn), 2)
 	end
 
-	local nSize = prefix:len() + 1 + text:len();
+	local nSize = prefix:len() + 1 + text:len()
 
 	if nSize>255 then
 		error("ChatThrottleLib:SendAddonMessage(): prefix + message length cannot exceed 254 bytes", 2)
 	end
 
-	nSize = nSize + self.MSG_OVERHEAD;
+	nSize = nSize + self.MSG_OVERHEAD
 
 	-- Check if there's room in the global available bandwidth gauge to send directly
 	if not self.bQueueing and nSize < self:UpdateAvail() then
 		self.avail = self.avail - nSize
 		bMyTraffic = true
 		_G.SendAddonMessage(prefix, text, chattype, target)
+		
 		bMyTraffic = false
 		self.Prio[prio].nTotalSent = self.Prio[prio].nTotalSent + nSize
 		if callbackFn then
@@ -494,7 +477,7 @@ function ChatThrottleLib:SendAddonMessage(prio, prefix, text, chattype, target, 
 	msg[2] = text
 	msg[3] = chattype
 	msg[4] = target
-	msg.n = (target~=nil) and 4 or 3;
+	msg.n = (target~=nil) and 4 or 3
 	msg.nSize = nSize
 	msg.callbackFn = callbackFn
 	msg.callbackArg = callbackArg
@@ -502,22 +485,4 @@ function ChatThrottleLib:SendAddonMessage(prio, prefix, text, chattype, target, 
 	self:Enqueue(prio, queueName or (prefix..chattype..(target or "")), msg)
 end
 
-
-
-
------------------------------------------------------------------------
--- Get the ball rolling!
-
 ChatThrottleLib:Init()
-
---[[ WoWBench debugging snippet
-if(WOWB_VER) then
-	local function SayTimer()
-		print("SAY: "..GetTime().." "..arg1)
-	end
-	ChatThrottleLib.Frame:SetScript("OnEvent", SayTimer)
-	ChatThrottleLib.Frame:RegisterEvent("CHAT_MSG_SAY")
-end
-]]
-
-

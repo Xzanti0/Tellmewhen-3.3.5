@@ -1,10 +1,6 @@
-﻿--GAME_LOCALE = UnitName("player") == "Cybeloras" and "zhCN" --FOR TESTING
-local L = LibStub("AceLocale-3.0"):NewLocale("TellMeWhen", "enUS", true)
-
--- WARNING! DO NOT EXPECT TO FIND ANY DECENT LEVEL OF ORGANIZATION IN THIS FILE, BECAUSE IT SIMPLY DOES NOT EXIST. MOVE ALONG.
+﻿local L = LibStub("AceLocale-3.0"):NewLocale("TellMeWhen", "enUS", true)
 
 L["!!Main Addon Description"] = "Provides visual, auditory, and textual notifications about cooldowns, buffs, and pretty much everything else." -- put it here so it doesnt get deleted on mass imports
-
 
 L["CMD_OPTIONS"] = "options"
 L["CMD_ENABLE"] = "enable"
@@ -842,7 +838,7 @@ L["MESSAGERECIEVE"] = "%s has sent you some TellMeWhen data! You can import this
 L["MESSAGERECIEVE_SHORT"] = "%s has sent you some TellMeWhen data!"
 L["ALLOWCOMM"] = "Allow data importing"
 L["ALLOWVERSIONWARN"] = "Notify of new version"
-L["NEWVERSION"] = "A new version of TellMeWhen is available: %s"
+L["NEWVERSION"] = "A new version of TellMeWhen is available from https://github.com/Xzanti0/Tellmewhen-3.3.5: %s"
 L["PLAYER_DESC"] = "(You)"
 
 

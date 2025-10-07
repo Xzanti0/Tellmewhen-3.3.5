@@ -76,7 +76,8 @@ local ItemCount = setmetatable({}, {__index = function(tbl, k)
 	local count = GetItemCount(k, nil, 1)
 	tbl[k] = count
 	return count
-end}) Type.ItemCount = ItemCount
+end}) 
+Type.ItemCount = ItemCount
 function Type:BAG_UPDATE()
 	for k in pairs(ItemCount) do
 		ItemCount[k] = GetItemCount(k, nil, 1)
@@ -125,7 +126,6 @@ local function ItemCooldown_OnUpdate(icon, time)
 
 				--icon:SetInfo(alpha, color, texture, start, duration, spellChecked, reverse, count, countText, forceupdate, unit)
 				icon:SetInfo(icon.Alpha, color, GetItemIcon(iName) or "Interface\\Icons\\INV_Misc_QuestionMark", start, duration, iName, nil, count, EnableStacks and count > 1 and count or "", nil, nil)
-
 				return
 			end
 		end
@@ -220,13 +220,11 @@ end
 
 function Type:DragReceived(icon, t, data, subType)
 	local ics = icon:GetSettings()
-
 	if t ~= "item" or not data then
 		return
 	end
-
 	ics.Name = TMW:CleanString(ics.Name .. ";" .. data)
-	return true -- signal success
+	return true
 end
 
 

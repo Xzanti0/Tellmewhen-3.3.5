@@ -11,12 +11,6 @@
 -- @name AceComm-3.0
 -- @release $Id$
 
---[[ AceComm-3.0
-
-TODO: Time out old data rotting around from dead senders? Not a HUGE deal since the number of possible sender names is somewhat limited.
-
-]]
-
 local CallbackHandler = LibStub("CallbackHandler-1.0")
 local CTL = assert(ChatThrottleLib, "AceComm-3.0 requires ChatThrottleLib")
 
@@ -29,7 +23,6 @@ if not AceComm then return end
 local type, next, pairs, tostring = type, next, pairs, tostring
 local strsub, strfind = string.sub, string.find
 local tinsert, tconcat = table.insert, table.concat
-local error, assert = error, assert
 
 -- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
 -- List them here for Mikk's FindGlobals script
@@ -55,7 +48,6 @@ function AceComm:RegisterComm(prefix, method)
 	if method == nil then
 		method = "OnCommReceived"
 	end
-
 	return AceComm._RegisterComm(self, prefix, method)	-- created by CallbackHandler
 end
 
@@ -71,15 +63,12 @@ local warnedPrefix=false
 -- @param callbackArg: OPTIONAL: first arg to the callback function. nil will be passed if not specified.
 function AceComm:SendCommMessage(prefix, text, distribution, target, prio, callbackFn, callbackArg)
 	prio = prio or "NORMAL"	-- pasta's reference implementation had different prio for singlepart and multipart, but that's a very bad idea since that can easily lead to out-of-sequence delivery!
-	if not( type(prefix)=="string" and
-			type(text)=="string" and
-			type(distribution)=="string" and
+	if not( type(prefix)=="string" and type(text)=="string" and type(distribution)=="string" and
 			(target==nil or type(target)=="string" or type(target)=="number") and
 			(prio=="BULK" or prio=="NORMAL" or prio=="ALERT")
-		) then
+	) then
 		error('Usage: SendCommMessage(addon, "prefix", "text", "distribution"[, "target"[, "prio"[, callbackFn, callbackarg]]])', 2)
 	end
-
 	if strfind(prefix, "[\001-\009]") then
 		if strfind(prefix, "[\001-\003]") then
 			error("SendCommMessage: Characters \\001--\\003 in prefix are reserved for AceComm metadata", 2)
@@ -91,8 +80,8 @@ function AceComm:SendCommMessage(prefix, text, distribution, target, prio, callb
 	end
 
 
-	local textlen = #text
-	local maxtextlen = 254 - #prefix	-- 254 is the max length of prefix + text that can be sent in one message
+	local textlen = strlen(text)
+	local maxtextlen = 254 - strlen(prefix)	-- 254 is the max length of prefix + text that can be sent in one message
 	local queueName = prefix..distribution..(target or "")
 
 	local ctlCallback = nil
@@ -101,7 +90,6 @@ function AceComm:SendCommMessage(prefix, text, distribution, target, prio, callb
 			return callbackFn(callbackArg, sent, textlen)
 		end
 	end
-
 	if textlen <= maxtextlen then
 		-- fits all in one message
 		CTL:SendAddonMessage(prio, prefix, text, distribution, target, queueName, ctlCallback, textlen)
@@ -110,21 +98,19 @@ function AceComm:SendCommMessage(prefix, text, distribution, target, prio, callb
 
 		-- first part
 		local chunk = strsub(text, 1, maxtextlen)
-		CTL:SendAddonMessage(prio, prefix..MSG_MULTI_FIRST, chunk, distribution, target, queueName, ctlCallback, maxtextlen)
+		CTL:SendAddonMessage(prio, prefix .. MSG_MULTI_FIRST, chunk, distribution, target, queueName, ctlCallback, maxtextlen)
 
 		-- continuation
-		local pos = 1+maxtextlen
-		local prefix2 = prefix..MSG_MULTI_NEXT
-
-		while pos+maxtextlen <= textlen do
-			chunk = strsub(text, pos, pos+maxtextlen-1)
-			CTL:SendAddonMessage(prio, prefix2, chunk, distribution, target, queueName, ctlCallback, pos+maxtextlen-1)
+		local pos = 1 + maxtextlen
+		while pos + maxtextlen <= textlen do
+			chunk = strsub(text, pos, pos + maxtextlen - 1)
+			CTL:SendAddonMessage(prio, prefix .. MSG_MULTI_NEXT, chunk, distribution, target, queueName, ctlCallback, pos + maxtextlen - 1)
 			pos = pos + maxtextlen
 		end
 
 		-- final part
 		chunk = strsub(text, pos)
-		CTL:SendAddonMessage(prio, prefix..MSG_MULTI_LAST, chunk, distribution, target, queueName, ctlCallback, textlen)
+		CTL:SendAddonMessage(prio, prefix .. MSG_MULTI_LAST, chunk, distribution, target, queueName, ctlCallback, textlen)
 	end
 end
 
@@ -212,10 +198,6 @@ do
 end
 
 
-
-
-
-
 ----------------------------------------
 -- Embed CallbackHandler
 ----------------------------------------
@@ -255,7 +237,7 @@ end
 
 local function OnEvent(this, event, ...)
 	if event == "CHAT_MSG_ADDON" then
-		local prefix,message,distribution,sender = ...
+		local prefix,message,distribution,sender = ...	
 		local reassemblername = AceComm.multipart_reassemblers[prefix]
 		if reassemblername then
 			-- multipart: reassemble

@@ -1830,7 +1830,7 @@ CNDT.Types = {
 		value = "ITEMINBAGS",
 		category = L["CNDTCAT_SPELLSABILITIES"],
 		min = 0,
-		max = 50,
+		max = 250,
 		texttable = function(k) 
 		    return format(ITEM_SPELL_CHARGES, k) 
 		end,

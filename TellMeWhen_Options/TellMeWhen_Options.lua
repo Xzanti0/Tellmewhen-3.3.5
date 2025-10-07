@@ -1,6 +1,7 @@
-﻿-- --------------------
+﻿-- ---------------------------------
 -- TellMeWhen
 -- Originally by Nephthys of Hyjal <lieandswell@yahoo.com>
+-- And maintained in the past by Cybeloras of Mal'Ganis
 
 -- Other contributions by
 -- Sweetmms of Blackrock
@@ -10,9 +11,8 @@
 -- Predeter of Proudmoore
 -- Xenyr of Aszune
 
--- Currently maintained by
--- Cybeloras of Mal'Ganis
--- --------------------
+-- Backport created by Xzanti of Warmane-Icecrown
+-- ---------------------------------
 
 if not TMW then return end
 
@@ -3766,14 +3766,13 @@ function TMW:ExportToString(editbox, ...)
 	--wotlk backport: disabling for now as i cannot get the help popup to close when ctrl+c is pressed
 	--HELP:Show("ICON_EXPORT_DOCOPY", nil, editbox, 0, 0, L["HELP_EXPORT_DOCOPY_" .. (IsMacClient() and "MAC" or "WIN")])
 end
-
 function TMW:ExportToComm(editbox, ...)
 	local player = strtrim(editbox:GetText())
-	if player and #player > 1 then -- and #player < 13 you can send to cross server people in a battleground ("Cybeloras-Mal'Ganis"), so it can be more than 13
+	if player and #player > 1 then
 		local s = TMW:GetSettingsString(...)
-
+		s = TMW_ReplaceLast(s, "|", "%") --wotlk: stupid pipe char cannot be sent over SendAddonMessage???
 		if player == "RAID" or player == "GUILD" then -- note the upper case
-			TMW:SendCommMessage("TMW", s, player, nil, "BULK", editbox.callback, editbox)
+			TMW:SendCommMessage("TMW", s,  player,   nil,    "BULK", editbox.callback, editbox)
 		else
 			TMW:SendCommMessage("TMW", s, "WHISPER", player, "BULK", editbox.callback, editbox)
 		end
@@ -3998,7 +3997,7 @@ function IE:Copy_DropDown(...)
 		for k, who in pairs(TMW.Received) do
 			-- deserialize received data because we dont do it as they are received; AceSerializer is only embedded in _Options
 			if type(k) == "string" and who then
-				local result = TMW:DeserializeData(k)
+				local result = TMW:DeserializeData(k)			
 				if result then
 					tinsert(DeserializedData, result)
 					result.who = who
@@ -4299,7 +4298,7 @@ function IE:Copy_DropDown(...)
 			info.tooltipOnButton = true
 			info.notCheckable = true
 			info.func = function()
-				TMW:ExportToString(EDITBOX, "global", TMW.db.profile, TMW.Defaults.profile, db:GetCurrentProfile())
+				TMW:ExportToString(EDITBOX, "global", TMW.db.profile, TMW.Defaults.profile, TMW.db:GetCurrentProfile())
 			end
 			UIDropDownMenu_AddButton(info, UIDROPDOWNMENU_MENU_LEVEL)
 		end

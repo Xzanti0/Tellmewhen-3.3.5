@@ -1,6 +1,7 @@
 ﻿-- ---------------------------------
 -- TellMeWhen
 -- Originally by Nephthys of Hyjal <lieandswell@yahoo.com>
+-- And maintained in the past by Cybeloras of Mal'Ganis
 
 -- Other contributions by
 -- Sweetmms of Blackrock
@@ -10,8 +11,7 @@
 -- Predeter of Proudmoore
 -- Xenyr of Aszune
 
--- Currently maintained by
--- Cybeloras of Mal'Ganis
+-- Backport created by Xzanti of Warmane-Icecrown
 -- ---------------------------------
 
 -- ---------------------------------
@@ -42,9 +42,6 @@ TELLMEWHEN_VERSION = "5.0.2"
 TELLMEWHEN_VERSION_MINOR = strmatch(" 5.0.2", " r%d+") or ""
 TELLMEWHEN_VERSION_FULL = TELLMEWHEN_VERSION .. TELLMEWHEN_VERSION_MINOR
 TELLMEWHEN_VERSIONNUMBER = 50202 -- NEVER DECREASE THIS NUMBER (duh?).  IT IS ALSO ONLY INTERNAL
-if TELLMEWHEN_VERSIONNUMBER > 51000 or TELLMEWHEN_VERSIONNUMBER < 50000 then 
-    return error("YOU SCREWED UP THE VERSION NUMBER OR DIDNT CHANGE THE SAFETY LIMITS") 
-end -- safety check because i accidentally made the version number 414069 once
 
 TELLMEWHEN_MAXGROUPS = 1 	--this is a default, used by SetTheory (addon), so dont rename
 TELLMEWHEN_MAXROWS = 20
@@ -66,8 +63,8 @@ local GetNumBattlefieldScores, GetBattlefieldScore =
 	  GetNumBattlefieldScores, GetBattlefieldScore
 local tonumber, tostring, type, pairs, ipairs, tinsert, tremove, sort, select, wipe, rawget, next, assert, pcall, getmetatable, setmetatable, date, CopyTable =
 	  tonumber, tostring, type, pairs, ipairs, tinsert, tremove, sort, select, wipe, rawget, next, assert, pcall, getmetatable, setmetatable, date, CopyTable
-local strfind, strmatch, format, gsub, gmatch, strsub, strtrim, strsplit, strlower, strrep, min, max, ceil, floor, abs, random =
-	  strfind, strmatch, format, gsub, gmatch, strsub, strtrim, strsplit, strlower, strrep, min, max, ceil, floor, abs, random
+local strfind, strmatch, strlen, format, gsub, gmatch, strsub, strtrim, strsplit, strlower, strrep, min, max, ceil, floor, abs, random =
+	  strfind, strmatch, strlen, format, gsub, gmatch, strsub, strtrim, strsplit, strlower, strrep, min, max, ceil, floor, abs, random
 local _G, GetTime =
 	  _G, GetTime
 local MikSBT, Parrot, SCT =
@@ -91,7 +88,8 @@ local loweredbackup = {}
 local callbackregistry = {}
 local bullshitTable = {}
 local ActiveAnimations = {}
-local time = GetTime() TMW.time = time
+local time = GetTime()
+TMW.time = time
 local sctcolor = {r=1, b=1, g=1}
 local clientVersion = select(4, GetBuildInfo())
 local addonVersion = tonumber(GetAddOnMetadata("TellMeWhen", "X-Interface"))
@@ -132,9 +130,37 @@ TMW_GetPrimaryTalentTree = function()
 	end
 	return index --should return 1,2,3, or nil
 end
+TMW_ReplaceLast = function(mainString, targetSubstring, replacementString)
+    local lastIndex = -1
+    local startIndex = 1
+
+    -- Find all occurrences and store the index of the last one
+    while true do
+        local start, _ = strfind(mainString, targetSubstring, startIndex, true)
+        if start then
+            lastIndex = start
+            startIndex = start + 1 -- Move past the found substring to find the next
+        else
+            break
+        end
+    end
+
+    -- If the target substring was found, construct the new string
+    if lastIndex ~= -1 then
+        local prefix = strsub(mainString, 1, lastIndex - 1)
+        local suffix = strsub(mainString, lastIndex + strlen(targetSubstring))
+        return prefix .. replacementString .. suffix
+    else
+        return mainString -- No occurrence found, return original string
+    end
+end
 
 
-TMW.Print = TMW.Print or (function(m) if DEFAULT_CHAT_FRAME then DEFAULT_CHAT_FRAME:AddMessage(tostring(m)) end end)
+TMW.Print = TMW.Print or function(m) 
+    if DEFAULT_CHAT_FRAME then 
+	    DEFAULT_CHAT_FRAME:AddMessage(tostring(m)) 
+	end 
+end
 TMW.Warn = setmetatable(
 {}, {
 	__call = function(tbl, text)
@@ -400,7 +426,7 @@ function TMW.print(...)
 			prefix = format("|cffff0000 %s", linenum(3, 1))
 		end
 		prefix = prefix..":|r "
-		local func = TMW.debug and TMW.debug.print or (function(m) DEFAULT_CHAT_FRAME:AddMessage(tostring(m)) end)
+		local func = TMW.debug and TMW.debug.print or (function(m) if DEFAULT_CHAT_FRAME then DEFAULT_CHAT_FRAME:AddMessage(tostring(m)) end end)
 		if ... == TMW then
 			func(prefix, select(2,...))
 		else
@@ -814,11 +840,8 @@ TMW.Defaults = {
 		SUG_atBeginning	=	true,
 		ColorNames		=	true,
 		AlwaysSubLinks	=	false,
-	--[[	CodeSnippets = {
-		},]]
 		ColorMSQ	 	 = false,
 		OnlyMSQ		 	 = false,
-
 		Colors = {
 			["**"] = {
 				CBC = 	{r=0,	g=1,	b=0,	Override = false,	a=1,	},	-- cooldown bar complete
@@ -837,7 +860,7 @@ TMW.Defaults = {
 				NS	=	{r=1,	g=1,	b=1,	Override = false,			},	-- not counting somtimes
 			},
 		},
-		Groups 		= 	{
+		Groups 	= 	{
 			[1] = {
 				Enabled			= true,
 			},
@@ -920,8 +943,8 @@ TMW.Defaults = {
 						UnAlpha					= 1,
 						AlphaEnabled		    = false,
 						UnAlphaEnabled			= false,
-						ShowOC		            = { ["r"] = 1, ["g"] = 1, ["b"] = 1},
-						HideOC		            = { ["r"] = 1, ["g"] = 1, ["b"] = 1},
+						ShowOC		            = { r = 1, g = 1, b = 1,},
+						HideOC		            = { r = 1, g = 1, b = 1,},
 						ConditionAlpha			= 0,
 						RangeCheck				= false,
 						ManaCheck				= false,
@@ -1606,15 +1629,16 @@ function TMW:OnCommReceived(prefix, text, channel, who)
 		local major, minor, revision = strmatch(text, "M:(.*)%^m:(.*)%^R:(.*)%^")
 		TMW:Debug(prefix, who, major, minor, revision)
 		revision = tonumber(revision)
-		if not (revision and major and minor and revision > TELLMEWHEN_VERSIONNUMBER and revision ~= 414069) then
+		if not (revision and major and minor and revision > TELLMEWHEN_VERSIONNUMBER) then
 			return
-		elseif not ((minor == "" and who ~= "Cybeloras") or (tonumber(strsub(revision, 1, 3)) > tonumber(strsub(TELLMEWHEN_VERSIONNUMBER, 1, 3)) + 1)) then
+		elseif not ((minor == "") or (tonumber(strsub(revision, 1, 3)) > tonumber(strsub(TELLMEWHEN_VERSIONNUMBER, 1, 3)) + 1)) then
 			return
 		end
 		TMW.VersionWarned = true
 		TMW:Printf(L["NEWVERSION"], major .. minor)
 	elseif prefix == "TMW" and db.profile.ReceiveComm then
 		TMW.Received = TMW.Received or {}
+		text = TMW_ReplaceLast(text, "%", "|")
 		TMW.Received[text] = who or true
 
 		if who then
@@ -2550,7 +2574,6 @@ end
 
 function TMW:GlobalUpgrade()
 	TellMeWhenDB.Version = TellMeWhenDB.Version or 0
-	if TellMeWhenDB.Version == 414069 then TellMeWhenDB.Version = 41409 end --well, that was a mighty fine fail
 	-- Begin DB upgrades that need to be done before defaults are added.
 	-- Upgrades here should always do everything needed to every single profile,
 	-- and remember to make sure that a table exists before going into it.
@@ -2570,9 +2593,6 @@ function TMW:GlobalUpgrade()
 		end
 		if TellMeWhenDB.Version < 41410 then
 			for _, p in pairs(TellMeWhenDB.profiles) do
-				if p.Version == 414069 then
-					p.Version = 41409
-				end
 				if type(p.Version) == "string" then
 					local v = gsub(p.Version, "[^%d]", "") -- remove decimals
 					v = v..strrep("0", 5-#v)	-- append zeroes to create a 5 digit number
