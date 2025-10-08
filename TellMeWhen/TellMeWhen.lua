@@ -31,7 +31,6 @@ TellMeWhen = TMW
 -- TMW is set globally through CreateFrame
 
 local L = LibStub("AceLocale-3.0"):GetLocale("TellMeWhen", true)
---L = setmetatable({}, {__index = function() return "| ! | ! | ! | ! | ! | ! | ! | ! | ! | ! | ! | ! | ! | ! | ! | ! | ! " end}) -- stress testing for text widths
 TMW.L = L
 local LMB = LibStub("Masque", true) or (LibMasque and LibMasque("Button"))
 local AceDB = LibStub("AceDB-3.0")
@@ -5871,10 +5870,10 @@ function View:Icon_Setup(icon)
 	cd.noCooldownCount = not icon.ShowTimerText
 	cd:SetDrawEdge(db.profile.DrawEdge)
 
-
 	-- Masque skinning
 	icon.isDefaultSkin = nil
 	icon.normaltex = icon.__MSQ_NormalTexture or icon:GetNormalTexture()
+
 	if LMB then
 		local lmbGroup = LMB:Group("TellMeWhen", L["fGROUP"]:format(group:GetID()))
 		lmbGroup:AddButton(icon, icon.lmbButtonData)
@@ -5888,13 +5887,12 @@ function View:Icon_Setup(icon)
 	else
 		icon.isDefaultSkin = 1
 	end
-
-	if icon.isDefaultSkin then
-		group.barInsets = 1.5
-		cd:SetFrameLevel(icon:GetFrameLevel() + 1)
-	else
+	
+	group.barInsets = 1.5
+	cd:SetFrameLevel(icon:GetFrameLevel() + 1)	
+	if not icon.isDefaultSkin then
 		group.barInsets = 0
-		cd:SetFrameLevel(icon:GetFrameLevel() + -2)
+		--cd:SetFrameLevel(icon:GetFrameLevel() - 2) --wotlk: why, why, why???
 	end
 end
 
