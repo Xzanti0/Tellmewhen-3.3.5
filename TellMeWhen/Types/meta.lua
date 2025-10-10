@@ -18,6 +18,7 @@ local TMW = TMW
 if not TMW then return end
 local L = TMW.L
 local LMB = LibStub("Masque", true) or (LibMasque and LibMasque("Button"))
+local LBF = LibStub("LibButtonFacade", true)
 
 local db
 local _G, strmatch, tonumber, ipairs, pairs, next =
@@ -135,7 +136,7 @@ local function Meta_OnUpdate(icon, time)
 
 			TMW:Fire("TMW_ICON_META_INHERITED_ICON_CHANGED", icon, icToUse)
 
-			if LMB then -- i dont like the way that Masque handles this (inefficient), so i'll do it myself
+			if LMB or LBF then -- i dont like the way that Masque handles this (inefficient), so i'll do it myself
 				local icnt = icToUse.normaltex -- icon.normaltex = icon.__LBF_Normal or icon:GetNormalTexture() -- set during icon:Setup()
 				local iconnt = icon.normaltex
 				if icnt and iconnt then

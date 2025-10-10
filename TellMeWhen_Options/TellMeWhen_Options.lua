@@ -21,6 +21,7 @@ TMW.WidthCol1 = 170
 ---------- Libraries ----------
 local LSM = LibStub("LibSharedMedia-3.0")
 local LMB = LibStub("Masque", true) or (LibMasque and LibMasque("Button"))
+local LBF = LibStub("LibButtonFacade", true)
 local LiCD = LibStub("LibInternalCooldowns", true)
 
 
@@ -1294,7 +1295,7 @@ local colorIconTypeTemplate = {
 			type = "toggle",
 			order = 1,
 			hidden = function(info)
-				return not LMB or info[#info-1] ~= "GLOBAL"
+				return (not LMB and not LBF) or info[#info-1] ~= "GLOBAL"
 			end,
 		},
 		OnlyMSQ = {
@@ -1304,7 +1305,7 @@ local colorIconTypeTemplate = {
 			width = "double",
 			order = 2,
 			hidden = function(info)
-				return not LMB or info[#info-1] ~= "GLOBAL"
+				return (not LMB and not LBF) or info[#info-1] ~= "GLOBAL"
 			end,
 			disabled = function(info)
 				return not db.profile.ColorMSQ

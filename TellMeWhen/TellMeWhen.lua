@@ -33,6 +33,7 @@ TellMeWhen = TMW
 local L = LibStub("AceLocale-3.0"):GetLocale("TellMeWhen", true)
 TMW.L = L
 local LMB = LibStub("Masque", true) or (LibMasque and LibMasque("Button"))
+local LBF = LibStub("LibButtonFacade", true)
 local AceDB = LibStub("AceDB-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 local DRData = LibStub("DRData-1.0", true)
@@ -1297,25 +1298,26 @@ for k, v in pairs(TMW.EventList) do
     TMW.EventList[v.name] = v 
 end
 
-
-do -- hook LMB
-	local meta = LMB and getmetatable(LMB:Group("TellMeWhen")).__index
-
-	if meta and meta.Skin and meta.Disable and meta.Enable then
-		local function hook(self)
-			if self and self.Addon == "TellMeWhen" then
-				TMW:ScheduleUpdate(.2)
+local function TMW_hookbuttonskin(lib)
+    if lib then
+		local meta = lib and getmetatable(lib:Group("TellMeWhen")).__index
+		if meta and meta.Skin and meta.Disable and meta.Enable then
+			local function hook(self)
+				if self and self.Addon == "TellMeWhen" then
+					TMW:ScheduleUpdate(.2)
+				end
 			end
+			hooksecurefunc(meta, "Skin", hook)
+			hooksecurefunc(meta, "Disable", hook)
+			hooksecurefunc(meta, "Enable", hook)
+			hooksecurefunc(meta, "Update", hook)
+			hooksecurefunc(meta, "ReSkin", hook)
 		end
-
-		hooksecurefunc(meta, "Skin", hook)
-		hooksecurefunc(meta, "Disable", hook)
-		hooksecurefunc(meta, "Enable", hook)
-		hooksecurefunc(meta, "Update", hook)
-		hooksecurefunc(meta, "ReSkin", hook)
 	end
 end
-
+do
+	TMW_hookbuttonskin(LMB or LBF)
+end
 
 
 function TMW:RegisterCallback(event, func, arg1)
@@ -5391,12 +5393,12 @@ function Icon.SetInfo(icon, alpha, color, texture, start, duration, spellChecked
 			r, g, b, d = color, color, color, false
 		end
 
-		if not (LMB and OnlyMSQ) then
+		if not ((LMB or LBF) and OnlyMSQ) then
 			icon.texture:SetVertexColor(r, g, b, 1)
 		end
 		icon.texture:SetDesaturated(d)
 
-		if LMB and ColorMSQ then
+		if (LMB or LBF) and ColorMSQ then
 			local iconnt = icon.normaltex
 			if iconnt then
 				iconnt:SetVertexColor(r, g, b, 1)
@@ -5438,10 +5440,10 @@ function Icon.SetupText(icon, fontString, settings)
 	fontString:SetWidth(settings.ConstrainWidth and icon.texture:GetWidth() or 0)
 	fontString:SetFont(LSM:Fetch("font", settings.Name), settings.Size, settings.Outline)
 
-	if LMB then
+	if LMB or LBF then
 		if settings.OverrideLBFPos then
 			fontString:ClearAllPoints()
-			local func = fontString.__MSQ_SetPoint or fontString.SetPoint
+			local func = fontString.__MSQ_SetPoint or fontString.__LBF_SetPoint or fontString.SetPoint
 			func(fontString, settings.point, icon, settings.relativePoint, settings.x, settings.y)
 
 			fontString:SetJustifyH(settings.point:match("LEFT") or settings.point:match("RIGHT") or "CENTER")
@@ -5863,6 +5865,22 @@ function View:Icon_Deintegrate(icon)
 	icon.lmbButtonData = nil
 end
 
+local function TMW_SkinIcon(icon, group, lib)
+    if lib then
+		local skinnedGroup = lib:Group("TellMeWhen", L["fGROUP"]:format(group:GetID()))
+		skinnedGroup:AddButton(icon, icon.lmbButtonData)
+		group.SkinID = skinnedGroup.SkinID or (skinnedGroup.db and skinnedGroup.db.SkinID)
+		if skinnedGroup.Disabled or (skinnedGroup.db and skinnedGroup.db.Disabled) then
+			group.SkinID = "Blizzard"
+			if not icon.normaltex:GetTexture() then
+				icon.isDefaultSkin = 1
+			end
+		end
+	else
+	    icon.isDefaultSkin = 1
+	end
+end
+
 function View:Icon_Setup(icon)	
 	local cd = icon.cooldown
 	local group = icon.group
@@ -5872,22 +5890,10 @@ function View:Icon_Setup(icon)
 
 	-- Masque skinning
 	icon.isDefaultSkin = nil
-	icon.normaltex = icon.__MSQ_NormalTexture or icon:GetNormalTexture()
+	icon.normaltex = icon.__MSQ_NormalTexture or __LBF_NormalTexture or icon:GetNormalTexture()
 
-	if LMB then
-		local lmbGroup = LMB:Group("TellMeWhen", L["fGROUP"]:format(group:GetID()))
-		lmbGroup:AddButton(icon, icon.lmbButtonData)
-		group.SkinID = lmbGroup.SkinID or (lmbGroup.db and lmbGroup.db.SkinID)
-		if lmbGroup.Disabled or (lmbGroup.db and lmbGroup.db.Disabled) then
-			group.SkinID = "Blizzard"
-			if not icon.normaltex:GetTexture() then
-				icon.isDefaultSkin = 1
-			end
-		end
-	else
-		icon.isDefaultSkin = 1
-	end
-	
+	TMW_SkinIcon(icon, group, LMB or LBF)
+
 	group.barInsets = 1.5
 	cd:SetFrameLevel(icon:GetFrameLevel() + 1)	
 	if not icon.isDefaultSkin then
