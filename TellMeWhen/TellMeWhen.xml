@@ -71,6 +71,10 @@
 				    if IsControlKeyDown() then
 						self:GetSettings().Enabled = not self:GetSettings().Enabled
 						self:Setup()
+						if TMW.IE then
+							local checkbox = _G["TellMeWhen_IconEditorMain"].Enabled
+							checkbox:SetChecked(self:GetSettings().Enabled)
+						end
 					end
 				end
 				if TMW.IE then
