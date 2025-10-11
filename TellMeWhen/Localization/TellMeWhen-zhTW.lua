@@ -1322,4 +1322,11 @@ L["WARN_DRMISMATCH"] = [=[警告!你正在檢查遞減的法術來自兩個不�
 L["WATER"] = "水之圖騰"
 L["worldboss"] = "首領"
 
+L["ScrollStamina"] = "耐力捲軸"
+L["ScrollAgility"] = "敏捷捲軸"
+L["ScrollIntellect"] = "智力捲軸"
+L["ScrollStrength"] = "力量捲軸"
+L["ScrollSpirit"] = "靈魂捲軸"
 
+L["Flasks"] = "燒瓶"
+L["Potions"] = "藥水"
