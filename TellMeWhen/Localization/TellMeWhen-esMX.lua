@@ -2,6 +2,64 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("TellMeWhen", "esMX", false)
 if not L then return end
 
+L["!!Main Addon Description"] = "Proporciona notificaciones visuales, auditivas y textuales sobre tiempos de reutilización, ventajas y básicamente cualquier otra cosa. "
+
+L["IncreasedArmorPercent"] = "Porcentaje de armadura aumentado"
+L["DamageReduction"] = "Mayor reducción de daños"
+L["IncreasedSP"] = "Mayor poder de hechizo"
+L["IncreasedSpirit"] = "Espíritu aumentado"
+L["IncreasedStatAdd"] = "Aumento de estadísticas adicionales"
+L["IncreasedStatPercent"] = "Porcentaje de estadísticas aumentado"
+L["Replenishment"] = "Reposición"
+L["IncreasedAPPercent"] = "Porcentaje de poder de ataque aumentado"
+
+L["ANIM_TAB"] = "Animación"
+L["ANIM_ANIMTOUSE"] = "Animación A Usar"
+L["ANIM_ANIMSETTINGS"] = "Ajustes"
+
+L["ANIM_SECONDS"] = "%s Segundos"
+L["ANIM_PIXELS"] = "%s Píxels"
+L["ANIM_DURATION"] = "Duración de Animación"
+L["ANIM_DURATION_DESC"] = "Establece cuánto debería durar la animación tras ser activada. "
+L["ANIM_PERIOD"] = "Período de Destello"
+L["ANIM_PERIOD_DESC"] = [=[Establece cuánto tiempo dura cada destello - el tiempo durante el cual el destello es mostrado o fundido.
+
+Establezca a 0 si no quiere que haya destellos o fundidos. ]=]
+L["ANIM_MAGNITUDE"] = "Magnitud de Agitado"
+L["ANIM_MAGNITUDE_DESC"] = "Establece cuán violento debería ser el agitado."
+L["ANIM_THICKNESS"] = "Grosor del Borde"
+L["ANIM_THICKNESS_DESC"] = "Establece el grosor del borde."
+L["ANIM_SIZE_ANIM"] = "Tamaño Inicial de Borde"
+L["ANIM_SIZE_ANIM_DESC"] = "Establece cuánto de grande debería ser el borde entero. "
+L["ANIM_SIZEX"] = "Ancho de Imagen"
+L["ANIM_SIZEX_DESC"] = "Establece cuánto de ancha debería ser la imagen."
+L["ANIM_SIZEY"] = "Altura de Imagen"
+L["ANIM_SIZEY_DESC"] = "Establece cuándo de alta debería ser la imagen."
+L["ANIM_COLOR"] = "Color/Opacidad"
+L["ANIM_COLOR_DESC"] = "Configurar el color y la opacidad del destello."
+L["ANIM_FADE"] = "Desvanecer Destellos"
+L["ANIM_FADE_DESC"] = "Marque para que haya un desvanecimiento suave entre cada destello. Desmarque para destellar instantáneamente."
+L["ANIM_INFINITE"] = "Reproducir Indefinidamente"
+L["ANIM_INFINITE_DESC"] = "Marque para hacer que la animación se reproduzca hasta que sea sobrescrita por otra animación en el icono del mismo tipo, o hasta que la animación %q sea reproducida. "
+L["ANIM_TEX"] = "Textura"
+L["ANIM_SCREENSHAKE"] = "Pantalla: Agitar"
+L["ANIM_SCREENSHAKE_DESC"] = [=[Agita la pantalla entera cuando se activa. 
+
+NOTA: Esto sólo funcionará si está o bien fuera de combate o bien si las placas de nombre no se han activado en absoluto desde que se conectó. ]=]
+L["ANIM_ICONALPHAFLASH"] = "Icono: Destello Alfa"
+L["ANIM_ICONALPHAFLASH_DESC"] = "Destella el propio icono cambiando su opacidad. "
+L["ANIM_ICONBORDER"] = "Icono: Borde"
+L["ANIM_ICONBORDER_DESC"] = "Superpone un borde coloreado al icono. "
+L["ANIM_ICONCLEAR"] = "Icono: Detener Animacions"
+L["ANIM_ICONCLEAR_DESC"] = "Detiene todas las animaciones que se están reproduciendo en el icono actual. "
+L["ANIM_ICONFADE"] = "Icono: Desvanecerse/Aparecer "
+L["ANIM_ICONFADE_DESC"] = "Aplica suavemente cualquier cambio de opacidad sucedido con el evento seleccionado. "
+L["ANIM_ICONFLASH"] = "Icono: Destello de Color"
+L["ANIM_ICONFLASH_DESC"] = "Hace pasar una transparencia coloreada a través del icono."
+L["ANIM_ICONOVERLAYIMG"] = "Icono: Superponer Imagen"
+L["ANIM_ICONOVERLAYIMG_DESC"] = "Superpone una imagen personalizada sobre el icono."
+L["ANIM_ICONSHAKE"] = "Icono: Agitar"
+L["ANIM_ICONSHAKE_DESC"] = "Agita el icono cuando se activa. "
 
 L["CHOOSENAME_DIALOG"] = "Introduzca el nombre o la identificación de los hechizos / Capacidad / artículo / Buff / Debuff desea que este icono de la pantalla. Usted puede agregar múltiples Buffs / Debuffs separándolas con';'." -- Needs review
 L["CHOOSENAME_DIALOG_DDDEFAULT"] = "Conjuntos predefinidos Hechizo" -- Needs review

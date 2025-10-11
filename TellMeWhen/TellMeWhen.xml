@@ -67,6 +67,11 @@
 				end
 				if button == "RightButton" then
 					TMW.IE:Load(nil, self)
+				elseif button == "LeftButton" then
+				    if IsControlKeyDown() then
+						self:GetSettings().Enabled = not self:GetSettings().Enabled
+						self:Setup()
+					end
 				end
 				if TMW.IE then
 					TMW.IE:ScheduleIconSetup(self)

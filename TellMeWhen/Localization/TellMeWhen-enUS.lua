@@ -10,7 +10,8 @@ L["CMD_TOGGLE"] = "toggle"
 L["ICON_TOOLTIP1"] = "TellMeWhen"
 L["ICON_TOOLTIP2NEW"] = [[|cff7fffffRight-click|r for icon options.
 |cff7fffffRight-click and drag|r to another icon to move/copy.
-|cff7fffffDrag|r spells or items onto the icon for quick setup.]]
+|cff7fffffDrag|r spells or items onto the icon for quick setup.
+|cff7fffffCtrl-click|r to toggle enabled/disabled.]]
 L["ICON_TOOLTIP2NEWSHORT"] = [[|cff7fffffRight-click|r for icon options.]]
 L["LDB_TOOLTIP1"] = "|cff7fffffLeft-click|r to toggle the group locks"
 L["LDB_TOOLTIP2"] = "|cff7fffffRight-click|r to show the main TMW options"
